@@ -9,21 +9,16 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import {
-  NativeBaseProvider,
-  Button,
   Box,
-  HamburgerIcon,
   Pressable,
-  Heading,
   VStack,
   Text,
-  Center,
   HStack,
   Divider,
   Icon,
 } from "native-base";
+
 global.__reanimatedWorkletInit = () => {};
-const Drawer = createDrawerNavigator();
 
 //Import Screens
 import Dashboard from "../pages/Dashboard/Screen";
@@ -32,8 +27,15 @@ import Profile from "../pages/Profile/Screen";
 import Contact from "../pages/ContactUs/Screen";
 import About from "../pages/AboutUs/Screen";
 import SignIn from "../pages/Sign-In/Screen";
+
+//Import Components
+import DrawerIcon from "../components/DrawerIcon/component";
+
+//Variables
 const username = "johnDoeUsername";
 const name = "John";
+const Drawer = createDrawerNavigator();
+
 const getIcon = (screenName) => {
   switch (screenName) {
     case "My Scores":
@@ -49,14 +51,18 @@ function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props} safeArea>
       <VStack space="6" my="2" mx="1">
-        <Box px="4">
-          <Text bold color="gray.700">
-            Hello {name} !
-          </Text>
-          <Text fontSize="14" mt="1" color="gray.500" fontWeight="500">
-            {username}
-          </Text>
-        </Box>
+        <HStack space={2} mx="5">
+          <DrawerIcon navigation={props.navigation} iconSize={"md"} />
+
+          <Box px="4">
+            <Text bold color="gray.700">
+              Hello {name} !
+            </Text>
+            <Text fontSize="14" mt="1" color="gray.500" fontWeight="500">
+              {username}
+            </Text>
+          </Box>
+        </HStack>
         <VStack divider={<Divider />} space="4">
           <VStack space="3">
             {props.state.routeNames.map((name, index) => {
@@ -170,27 +176,26 @@ function CustomDrawerContent(props) {
 
 export default function DrawerRouter() {
   return (
-    <Box safeArea flex={1}>
-      <Drawer.Navigator
-        drawerContent={(props) => <CustomDrawerContent {...props} />}
-      >
-        {/*
+    <Drawer.Navigator
+      drawerContent={(props) => <CustomDrawerContent {...props} />}
+      screenOptions={{ headerShown: false }}
+    >
+      {/*
         ////////
          Rendered Drawer Links! 
         ////////
         */}
-        <Drawer.Screen name="Dashboard" component={Dashboard} />
-        <Drawer.Screen name="My Profile" component={Profile} />
-        <Drawer.Screen name="My Scores" component={MyScores} />
-        {/*
+      <Drawer.Screen name="Dashboard" component={Dashboard} />
+      <Drawer.Screen name="My Profile" component={Profile} />
+      <Drawer.Screen name="My Scores" component={MyScores} />
+      {/*
         ////////
          Fixed Drawer Links! 
         ////////
         */}
-        <Drawer.Screen name="Contact Us" component={Contact} />
-        <Drawer.Screen name="About Us" component={About} />
-        <Drawer.Screen name="Sign Out" component={SignIn} />
-      </Drawer.Navigator>
-    </Box>
+      <Drawer.Screen name="Contact Us" component={Contact} />
+      <Drawer.Screen name="About Us" component={About} />
+      <Drawer.Screen name="Sign Out" component={SignIn} />
+    </Drawer.Navigator>
   );
 }

@@ -16,7 +16,7 @@ export default function Landing({ navigation }) {
   return (
     <Box flex={1} bg="#fff" alignItems="center" justifyContent="center">
       <Text>Landing Screen!</Text>
-      <Button onPress={() => navigation.navigate("Index")}>
+      <Button onPress={() => navigation.navigate("Home")}>
         Go To Dashboard
       </Button>
     </Box>
