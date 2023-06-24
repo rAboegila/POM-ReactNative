@@ -89,7 +89,7 @@ function CustomDrawerContent(props) {
                         color={
                           index === props.state.index
                             ? "primary.500"
-                            : "gray.500"
+                            : "green.600"
                         }
                         size="5"
                         as={getIcon(name)}
@@ -99,7 +99,7 @@ function CustomDrawerContent(props) {
                         color={
                           index === props.state.index
                             ? "primary.500"
-                            : "gray.700"
+                            : "green.900"
                         }
                       >
                         {name}
@@ -121,11 +121,11 @@ function CustomDrawerContent(props) {
               >
                 <HStack space="7" alignItems="center">
                   <Icon
-                    color="gray.500"
+                    color="green.600"
                     size="5"
                     as={<MaterialCommunityIcons name="phone-message" />}
                   />
-                  <Text color="gray.700" fontWeight="500">
+                  <Text color="green.900" fontWeight="500">
                     Contact Us
                   </Text>
                 </HStack>
@@ -139,11 +139,11 @@ function CustomDrawerContent(props) {
               >
                 <HStack space="7" alignItems="center">
                   <Icon
-                    color="gray.500"
+                    color="green.600"
                     size="5"
                     as={<MaterialCommunityIcons name="information" />}
                   />
-                  <Text color="gray.700" fontWeight="500">
+                  <Text color="green.900" fontWeight="500">
                     About Us
                   </Text>
                 </HStack>
@@ -157,11 +157,11 @@ function CustomDrawerContent(props) {
               >
                 <HStack space="7" alignItems="center">
                   <Icon
-                    color="gray.500"
+                    color="green.600"
                     size="5"
                     as={<MaterialCommunityIcons name="logout" />}
                   />
-                  <Text fontWeight="500" color="gray.700">
+                  <Text fontWeight="500" color="green.900">
                     Sign Out
                   </Text>
                 </HStack>

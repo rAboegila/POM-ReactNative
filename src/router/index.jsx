@@ -15,7 +15,7 @@ const Router = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        options={{ headerShown: true }}
+        options={{ headerShown: false }}
         name="Landing"
         component={Landing}
       />

@@ -14,10 +14,15 @@ export default function DrawerIcon({ navigation, iconSize }) {
             as={AntDesign}
             name="menu-unfold"
             size={iconSize}
-            color="black"
+            color="green.700"
           />
         ) : (
-          <Icon as={AntDesign} name="menu-fold" size={iconSize} color="black" />
+          <Icon
+            as={AntDesign}
+            name="menu-fold"
+            size={iconSize}
+            color="green.700"
+          />
         )}
       </Pressable>
     </HStack>
