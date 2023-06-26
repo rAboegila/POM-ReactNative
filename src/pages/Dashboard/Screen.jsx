@@ -1,4 +1,7 @@
+//React + React Native Imports
 import React from "react";
+
+// UI Library and Elements Imports
 import { FontAwesome5, Entypo } from "@expo/vector-icons";
 import {
   Box,
@@ -9,10 +12,15 @@ import {
   Circle,
   Image,
 } from "native-base";
+
+//Components Imports
 import DrawerIcon from "../../components/DrawerIcon/component";
 import DashboardItem from "../../components/DashboardItem/component";
-import styles from "./styles";
 import logo from "../../../assets/POM_Logo.jpg";
+
+// External Style Sheet Import
+import styles from "./styles";
+
 export default function Dashboard({ navigation }) {
   return (
     <Box safeArea bg="light.100">
