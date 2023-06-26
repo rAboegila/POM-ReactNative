@@ -19,6 +19,9 @@ export default function Landing({ navigation }) {
       <Button onPress={() => navigation.navigate("Index")}>
         Go To Dashboard
       </Button>
+      <Button onPress={() => navigation.navigate("SignIn")}>
+        Go To Dashboard
+      </Button>
     </Box>
   );
 }
