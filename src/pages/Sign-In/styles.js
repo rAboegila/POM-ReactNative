@@ -7,4 +7,7 @@ export default styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  button:{
+    backgroundColor:"#14ae5c",
+}
 });

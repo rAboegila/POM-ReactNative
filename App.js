@@ -6,6 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 // import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NativeBaseProvider, Text, Box } from "native-base";
 import Router from "./src/router";
+import SignIn from "./src/pages/Sign-In/Screen";
 // const Drawer = createDrawerNavigator();
 // function HomeScreen({ navigation }) {
 //   return (
