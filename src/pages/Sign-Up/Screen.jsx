@@ -1,4 +1,4 @@
-import React, { useState,useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import {
   Box,
   Heading,
@@ -26,44 +26,43 @@ export default SignUp = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [dob, setDob] = useState(new Date());
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [errors, setErrors] = useState({});
   const [cityOpen, setCityOpen] = useState(false);
   const [city, setCity] = useState("");
-  const [cities, setCities] = useState(
-    [
-      {label:'Cairo', value: 'Cairo'},
-      {label:'Giza',value: 'Giza'},
-      {label:'Alexandria',value: 'Alexandria'},
-      {label:'Luxor',value: 'Luxor'},
-      {label:'Aswan',value: 'Aswan'},
-      {label:'Suez',value: 'Suez'},
-      {label:'Ismailia',value: 'Ismailia'},
-      {label:'Port Said',value:'Port Said'},
-      {label:'Damietta',value:'Damietta'},
-      {label:'Dakahlia',value:'Dakahlia'},
-      {label:'Sharqia',value:'Sharqia'},
-      {label:'Qalyubia',value:'Qalyubia'},
-      {label:'Gharbia',value:'Gharbia'},
-      {label:'Kafr El Sheikh',value:'Kafr El Sheikh'},
-      {label:'Monufia',value:'Monufia'},
-      {label:'Beheira',value:'Beheira'},
-      {label:'Minya',value:'Minya'},
-      {label:'Beni Suef',value:'Beni Suef'},
-      {label:'Faiyum',value:'Faiyum'},
-      {label:'New Valley',value:'New Valley'},
-      {label:'Asyut',value:'Asyut'},
-      {label:'Red Sea',value:'Red Sea'},
-      {label:'Sohag',value:'Sohag'},
-      {label:'Qena',value:'Qena'}, 
-      {label:'Matruh',value:'Matruh'},
-      {label:'North Sinai',value:'North Sinai'},
-      {label:'South Sinai',value:'South Sinai'},
-      {label:'Helwan',value:'Helwan'},
-    ]);
+  const [cities, setCities] = useState([
+    { label: "Cairo", value: "Cairo" },
+    { label: "Giza", value: "Giza" },
+    { label: "Alexandria", value: "Alexandria" },
+    { label: "Luxor", value: "Luxor" },
+    { label: "Aswan", value: "Aswan" },
+    { label: "Suez", value: "Suez" },
+    { label: "Ismailia", value: "Ismailia" },
+    { label: "Port Said", value: "Port Said" },
+    { label: "Damietta", value: "Damietta" },
+    { label: "Dakahlia", value: "Dakahlia" },
+    { label: "Sharqia", value: "Sharqia" },
+    { label: "Qalyubia", value: "Qalyubia" },
+    { label: "Gharbia", value: "Gharbia" },
+    { label: "Kafr El Sheikh", value: "Kafr El Sheikh" },
+    { label: "Monufia", value: "Monufia" },
+    { label: "Beheira", value: "Beheira" },
+    { label: "Minya", value: "Minya" },
+    { label: "Beni Suef", value: "Beni Suef" },
+    { label: "Faiyum", value: "Faiyum" },
+    { label: "New Valley", value: "New Valley" },
+    { label: "Asyut", value: "Asyut" },
+    { label: "Red Sea", value: "Red Sea" },
+    { label: "Sohag", value: "Sohag" },
+    { label: "Qena", value: "Qena" },
+    { label: "Matruh", value: "Matruh" },
+    { label: "North Sinai", value: "North Sinai" },
+    { label: "South Sinai", value: "South Sinai" },
+    { label: "Helwan", value: "Helwan" },
+  ]);
   const [interestsOpen, setInterestsOpen] = useState(false);
   const [interestsValue, setInterestsValue] = useState(null);
   const [interests, setInterests] = useState([
@@ -72,11 +71,11 @@ export default SignUp = ({ navigation }) => {
     { label: "Both", value: "both" },
   ]);
 
-  const onInterestsOpen =  useCallback(() => {
+  const onInterestsOpen = useCallback(() => {
     setCityOpen(false);
   }, []);
 
-  const onCityOpen = useCallback(() =>{
+  const onCityOpen = useCallback(() => {
     setInterestsOpen(false);
   }, []);
 
@@ -167,9 +166,9 @@ export default SignUp = ({ navigation }) => {
     }
 
     //interests Validation
-    if(interestsValue === null){
+    if (interestsValue === null) {
       formIsValid = false;
-      errors["interests"] = "Please select interests" 
+      errors["interests"] = "Please select interests";
     }
 
     setErrors(errors);
@@ -188,7 +187,7 @@ export default SignUp = ({ navigation }) => {
           email,
           phoneNumber,
           dob: dob.toISOString().slice(0, 10),
-          interests:interestsValue,
+          interests: interestsValue,
           city,
           password,
         })
@@ -205,7 +204,7 @@ export default SignUp = ({ navigation }) => {
           email,
           phoneNumber,
           dob: dob.toISOString().slice(0, 10),
-          interests:interestsValue,
+          interests: interestsValue,
           city,
           password,
         }),
@@ -297,42 +296,42 @@ export default SignUp = ({ navigation }) => {
             </FormControl>
             <FormControl>
               <FormControl.Label>Interests</FormControl.Label>
-                <DropDownPicker
-                  style={styles.dropdown}
-                  open={interestsOpen}
-                  value={interestsValue} 
-                  items={interests}
-                  setOpen={setInterestsOpen}
-                  setValue={setInterestsValue}
-                  setItems={setInterests}
-                  onOpen={onInterestsOpen}
-                  placeholder="Select Interests"
-                  placeholderStyle={styles.placeholderStyles}
-                  zIndex={3000}
-                  zIndexInverse={1000}
-                />
+              <DropDownPicker
+                style={styles.dropdown}
+                open={interestsOpen}
+                value={interestsValue}
+                items={interests}
+                setOpen={setInterestsOpen}
+                setValue={setInterestsValue}
+                setItems={setInterests}
+                onOpen={onInterestsOpen}
+                placeholder="Select Interests"
+                placeholderStyle={styles.placeholderStyles}
+                zIndex={3000}
+                zIndexInverse={1000}
+              />
               {errors.interests ? (
                 <Text style={{ color: "red" }}>{errors.interests}</Text>
               ) : null}
             </FormControl>
             <FormControl>
               <FormControl.Label>City</FormControl.Label>
-                <DropDownPicker
-                  style={styles.dropdown}
-                  open={cityOpen}
-                  value={city} 
-                  items={cities}
-                  setOpen={setCityOpen}
-                  setValue={setCity}
-                  setItems={setCities}
-                  onOpen={onCityOpen}
-                  placeholder="Select Government"
-                  placeholderStyle={styles.placeholderStyles}
-                  zIndex={3000}
-                  zIndexInverse={1000}
-                  listMode="SCROLLVIEW"
-                />
-          
+              <DropDownPicker
+                style={styles.dropdown}
+                open={cityOpen}
+                value={city}
+                items={cities}
+                setOpen={setCityOpen}
+                setValue={setCity}
+                setItems={setCities}
+                onOpen={onCityOpen}
+                placeholder="Select Government"
+                placeholderStyle={styles.placeholderStyles}
+                zIndex={3000}
+                zIndexInverse={1000}
+                listMode="SCROLLVIEW"
+              />
+
               {errors.city ? (
                 <Text style={{ color: "red" }}>{errors.city}</Text>
               ) : null}

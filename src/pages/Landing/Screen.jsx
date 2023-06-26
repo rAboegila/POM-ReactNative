@@ -24,7 +24,7 @@ export default function Landing({ navigation }) {
         >
           <Box p="3">
             <Button
-              onPress={() => navigation.navigate("Home")}
+              onPress={() => navigation.navigate("SignIn")}
               colorScheme="lime"
               mb="80px"
               _text={{

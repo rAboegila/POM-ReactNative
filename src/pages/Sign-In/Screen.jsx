@@ -16,8 +16,11 @@ import {
 import { MaterialIcons, Feather } from "@expo/vector-icons";
 import styles from "./styles";
 import axios from "axios";
-import { loggedInUpdated ,getLoggedIn} from "../../redux/features/auth/authSlice";
-import { useDispatch } from "react-redux";
+import {
+  loggedInUpdated,
+  getLoggedIn,
+} from "../../redux/features/auth/authSlice";
+// import { useDispatch } from "react-redux";
 
 export default function SignIn({ navigation }) {
   const [email, setEmail] = useState("");
@@ -25,7 +28,7 @@ export default function SignIn({ navigation }) {
   const [show, setShow] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const handleValidation = () => {
     let errors = {};
@@ -52,8 +55,6 @@ export default function SignIn({ navigation }) {
         .post("http://192.168.1.8:5000/pom/auth/login", { email, password })
         .then(() => {
           setLoading(false);
-          // dispatch(loggedInUpdated(true));
-          // console.log(getLoggedIn());
         })
         .catch((err) => {
           setLoading(false);
