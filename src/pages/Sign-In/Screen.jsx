@@ -12,23 +12,25 @@ import {
   Pressable,
   Icon,
   Text,
+  useToast,
 } from "native-base";
 import { MaterialIcons, Feather } from "@expo/vector-icons";
 import styles from "./styles";
 import axios from "axios";
 import {
   loggedInUpdated,
-  getLoggedIn,
+  setToken,
 } from "../../redux/features/auth/authSlice";
-// import { useDispatch } from "react-redux";
+import { useDispatch} from "react-redux";
 
 export default function SignIn({ navigation }) {
+  const toast = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const handleValidation = () => {
     let errors = {};
@@ -53,13 +55,16 @@ export default function SignIn({ navigation }) {
     if (handleValidation()) {
       await axios
         .post("http://192.168.1.8:5000/pom/auth/login", { email, password })
-        .then(() => {
+        .then((res) => {
           setLoading(false);
+          dispatch(loggedInUpdated(true))
+          dispatch(setToken(res.data.token))
+          toast.show({title: "Logged in successfully",placement:"top"})
         })
         .catch((err) => {
-          setLoading(false);
           console.log(err);
         });
+        setLoading(false);
     }
   };
 

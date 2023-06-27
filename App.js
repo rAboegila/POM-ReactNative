@@ -7,6 +7,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { NativeBaseProvider, Text, Box } from "native-base";
 import Router from "./src/router";
 import SignIn from "./src/pages/Sign-In/Screen";
+import { Provider } from "react-redux";
+import { store } from "./src/redux/store";
 // const Drawer = createDrawerNavigator();
 // function HomeScreen({ navigation }) {
 //   return (
@@ -35,20 +37,22 @@ import SignIn from "./src/pages/Sign-In/Screen";
 // }
 export default function App() {
   return (
-    <NavigationContainer>
-      <NativeBaseProvider>
-        {/* <Drawer.Navigator initialRouteName="Home">
+    <Provider store={store}>
+      <NavigationContainer>
+        <NativeBaseProvider>
+          {/* <Drawer.Navigator initialRouteName="Home">
           <Drawer.Screen name="Home" component={HomeScreen} />
           <Drawer.Screen name="Notifications" component={NotificationsScreen} />
         </Drawer.Navigator> */}
-        {/* <View style={styles.container}>
+          {/* <View style={styles.container}>
           <Text>Open up App.js to start working on your app!</Text>
           <StatusBar style="auto" />
         </View> */}
-        
-        <Router />
-      </NativeBaseProvider>
-    </NavigationContainer>
+
+          <Router />
+        </NativeBaseProvider>
+      </NavigationContainer>
+    </Provider>
   );
 }
 

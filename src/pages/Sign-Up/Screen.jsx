@@ -12,21 +12,25 @@ import {
   View,
   CheckIcon,
   ScrollView,
+  useToast,
 } from "native-base";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Pressable } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import DropDownPicker from "react-native-dropdown-picker";
+import {Feather} from '@expo/vector-icons'
 import styles from "./styles";
+import axios from "axios";
 
 export default SignUp = ({ navigation }) => {
+  const [loading, setLoading] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [dob, setDob] = useState(new Date());
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(new Date().toISOString().slice(0,10));
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -70,6 +74,7 @@ export default SignUp = ({ navigation }) => {
     { label: "Skate", value: "skate" },
     { label: "Both", value: "both" },
   ]);
+  const toast = useToast();
 
   const onInterestsOpen = useCallback(() => {
     setCityOpen(false);
@@ -87,7 +92,7 @@ export default SignUp = ({ navigation }) => {
       const currentDate = selectedDate;
       toggleDatePicker();
       setDob(currentDate);
-      setDate(currentDate.toString());
+      setDate(currentDate.toISOString().slice(0,10));
     } else {
       toggleDatePicker();
     }
@@ -135,10 +140,13 @@ export default SignUp = ({ navigation }) => {
     // Phone number validation
     if (!phoneNumber) {
       formIsValid = false;
-      errors["phoneNumber"] = "Phone number cannot be empty";
-    } else if (!/^\d+$/.test(phoneNumber)) {
+      errors["phoneNumber"] = "Phone number is required";
+    } else if (
+      phoneNumber.length !== 11 &&
+      !/^(010|011|015|012)\d{8}$/.test(phoneNumber)
+    ) {
       formIsValid = false;
-      errors["phoneNumber"] = "Phone number must contain only digits";
+      errors["phoneNumber"] = "Invalid phone number";
     }
 
     // City validation
@@ -154,6 +162,10 @@ export default SignUp = ({ navigation }) => {
     } else if (password.length < 8) {
       formIsValid = false;
       errors["password"] = "Password must be at least 8 characters long";
+    } else if (!/^(?=.*[@_#$&])[A-Za-z\d@$!%*#?&^_-]{8,}$/.test(password)) {
+      formIsValid = false;
+      errors["password"] =
+        "Password must contain at least one of the following characters: @, _, #, $, or &";
     }
 
     // Confirm password validation
@@ -171,51 +183,40 @@ export default SignUp = ({ navigation }) => {
       errors["interests"] = "Please select interests";
     }
 
+    if(city === null){
+      formIsValid = false;
+      errors["city"] = "Please select city";
+    }
+
     setErrors(errors);
     return formIsValid;
   };
 
   const handleSubmit = async () => {
-    console.log(dob.toISOString().slice(0, 10));
+    setLoading(true);
     if (handleValidation()) {
-      console.log("Form submitted");
-      console.log(
-        JSON.stringify({
-          firstName,
-          lastName,
-          username,
-          email,
-          phoneNumber,
-          dob: dob.toISOString().slice(0, 10),
-          interests: interestsValue,
-          city,
-          password,
-        })
-      );
-      await fetch("http://192.168.1.8:5000/pom/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          username,
-          email,
-          phoneNumber,
-          dob: dob.toISOString().slice(0, 10),
-          interests: interestsValue,
-          city,
-          password,
-        }),
+      await axios.post("http://192.168.1.8:5000/pom/auth/register",{
+        firstName,
+        lastName,
+        username,
+        email,
+        phoneNumber,
+        dob: dob.toISOString().slice(0, 10),
+        interests: interestsValue,
+        city,
+        password,
       })
-        .then((response) => console.log(response))
+        .then(() => {
+          toast.show({title: "Registered Successfully",placement:"top"})
+          navigation.navigate('SignIn');
+        })
         .catch((error) => console.log(error));
     }
+    setLoading(false);
   };
 
   return (
-    <ScrollView w="100%">
+    <ScrollView w="100%" nestedScrollEnabled>
       <Center>
         <Box safeArea p="2" w="90%" maxW="290" py="8">
           <Heading
@@ -296,41 +297,46 @@ export default SignUp = ({ navigation }) => {
             </FormControl>
             <FormControl>
               <FormControl.Label>Interests</FormControl.Label>
-              <DropDownPicker
-                style={styles.dropdown}
-                open={interestsOpen}
-                value={interestsValue}
-                items={interests}
-                setOpen={setInterestsOpen}
-                setValue={setInterestsValue}
-                setItems={setInterests}
-                onOpen={onInterestsOpen}
-                placeholder="Select Interests"
-                placeholderStyle={styles.placeholderStyles}
-                zIndex={3000}
-                zIndexInverse={1000}
-              />
+              <View>
+                <DropDownPicker
+                  style={styles.dropdown}
+                  open={interestsOpen}
+                  value={interestsValue}
+                  items={interests}
+                  setOpen={setInterestsOpen}
+                  setValue={setInterestsValue}
+                  setItems={setInterests}
+                  onOpen={onInterestsOpen}
+                  placeholder="Select Interests"
+                  placeholderStyle={styles.placeholderStyles}
+                  dropDownDirection="TOP"
+                  zIndex={3000}
+                  zIndexInverse={1000}
+                />
+              </View>
               {errors.interests ? (
                 <Text style={{ color: "red" }}>{errors.interests}</Text>
               ) : null}
             </FormControl>
             <FormControl>
               <FormControl.Label>City</FormControl.Label>
-              <DropDownPicker
-                style={styles.dropdown}
-                open={cityOpen}
-                value={city}
-                items={cities}
-                setOpen={setCityOpen}
-                setValue={setCity}
-                setItems={setCities}
-                onOpen={onCityOpen}
-                placeholder="Select Government"
-                placeholderStyle={styles.placeholderStyles}
-                zIndex={3000}
-                zIndexInverse={1000}
-                listMode="SCROLLVIEW"
-              />
+              <View>
+                <DropDownPicker
+                  style={styles.dropdown}
+                  open={cityOpen}
+                  value={city}
+                  items={cities}
+                  setOpen={setCityOpen}
+                  setValue={setCity}
+                  setItems={setCities}
+                  onOpen={onCityOpen}
+                  placeholder="Select Government"
+                  placeholderStyle={styles.placeholderStyles}
+                  dropDownDirection="TOP"
+                  zIndex={1000}
+                  zIndexInverse={3000}
+                />
+              </View>
 
               {errors.city ? (
                 <Text style={{ color: "red" }}>{errors.city}</Text>
@@ -346,21 +352,24 @@ export default SignUp = ({ navigation }) => {
                   onChange={changeDate}
                 />
               )}
-              {!showDatePicker && (
                 <View>
                   <Pressable onPress={toggleDatePicker}>
                     <TextInput
                       value={date}
-                      placeholder="Sat Aug 21 2004"
+                      style={styles.input}
+                      placeholderTextColor="black"
                       editable={false}
                     />
                   </Pressable>
                 </View>
-              )}
             </FormControl>
 
             <Button mt="2" style={styles.button} onPress={handleSubmit}>
-              Sign up
+            {loading ? (
+              <Feather name="loader" color="black" size={24} />
+            ) : (
+              <Text>Sign Up</Text>
+            )}
             </Button>
           </VStack>
         </Box>

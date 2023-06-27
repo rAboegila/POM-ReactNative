@@ -9,5 +9,13 @@ export default styles = StyleSheet.create({
   },
   button:{
     backgroundColor:"#14ae5c"
+},
+input:{
+  color:"black",
+  padding:5,
+  textAlign:"center",
+  borderWidth:1,
+  borderColor:"grey",
+  borderRadius:5
 }
 });
