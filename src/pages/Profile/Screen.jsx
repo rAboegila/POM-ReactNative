@@ -11,12 +11,7 @@ import {
   Center,
   VStack,
   Avatar,
-  FormControl,
-  Stack,
-  Input,
-  Button,
-  Circle,
-  Image,
+  IconButton,
   ScrollView,
 } from "native-base";
 
@@ -28,32 +23,52 @@ import ProfileInformationForm from "../../components/ProfileInformationForm/comp
 import styles from "./styles";
 
 export default function Profile({ navigation }) {
+  const [isEditing, setIsEditing] = useState(false);
+  function toggleEditMode() {
+    console.log("before", isEditing);
+    setIsEditing((prevState) => !prevState);
+    console.log("after", isEditing);
+  }
   return (
-    <Box safeArea>
-      <VStack>
+    <ScrollView stickyHeaderIndices={[0]}>
+      <Box safeArea mb="3">
         <HStack mx="3" my="2">
           <DrawerIcon navigation={navigation} iconSize={"lg"} />
         </HStack>
-        <VStack>
-          <Center>
-            <Avatar
-              bg="green.500"
-              source={{
-                uri: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-              }}
-              size={"lg"}
-            ></Avatar>
-            <HStack>
-              <Text>John Doe</Text>
-              <Icon as={AntDesign} name={"edit"} size="sm" color="black" />
-            </HStack>
-          </Center>
-          <Box alignItems="center">
-            <Box w="100%" maxWidth="300px"></Box>
-          </Box>
-        </VStack>
-        <ProfileInformationForm />
-      </VStack>
-    </Box>
+      </Box>
+
+      <Center>
+        <Avatar
+          bg="green.500"
+          source={{
+            uri: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
+          }}
+          size={"xl"}
+          mb="4"
+        ></Avatar>
+        <Center flexDirection="row">
+          <Text fontSize={"md"} mx="4">
+            John Doe
+          </Text>
+          <IconButton
+            onPress={toggleEditMode}
+            isDisabled={isEditing}
+            variant="solid"
+            colorScheme="success"
+            _icon={{
+              as: AntDesign,
+              name: "edit",
+              size: "xs",
+              color: "white",
+            }}
+          />
+        </Center>
+      </Center>
+      <ProfileInformationForm
+        isEditing={isEditing}
+        setIsEditing={setIsEditing}
+        my="3"
+      />
+    </ScrollView>
   );
 }
