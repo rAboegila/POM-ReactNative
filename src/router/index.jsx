@@ -16,7 +16,8 @@ import { useSelector } from "react-redux";
 import { getLoggedIn } from "../redux/features/auth/authSlice";
 
 const Router = () => {
-  const isLoggedIn = useSelector(getLoggedIn);
+  // const isLoggedIn = useSelector(getLoggedIn);
+  const isLoggedIn = true;
   const Stack = createNativeStackNavigator();
   return isLoggedIn ? (
     <Stack.Navigator>

@@ -2,125 +2,236 @@
 import React, { useState } from "react";
 
 // UI Library and Elements Imports
-import { AntDesign, WarningOutlineIcon } from "@expo/vector-icons";
-import {
-  Box,
-  Text,
-  Icon,
-  HStack,
-  Center,
-  VStack,
-  Avatar,
-  FormControl,
-  Stack,
-  Input,
-  Button,
-  Circle,
-  Image,
-  ScrollView,
-} from "native-base";
+import { Center, VStack, Button, FormControl, View } from "native-base";
+import DropDownPicker from "react-native-dropdown-picker";
 
 //Components Imports
-import DrawerIcon from "../../components/DrawerIcon/component";
-import DashboardItem from "../../components/DashboardItem/component";
-import logo from "../../../assets/POM_Logo.jpg";
+import FormInput from "./FormInput";
 
 // External Style Sheet Import
 // import styles from "./styles";
 
-export default function ProfileInformationForm() {
-  const [formData, setData] = React.useState({});
-  const [errors, setErrors] = React.useState({});
-
-  const validate = () => {
-    setErrors({});
-    console.log(formData);
-    console.log("before valid", errors);
-
-    valid = true;
-    console.log(formData.name);
-
-    if (formData.name == undefined) {
-      console.log("undefined name");
-      setErrors({ ...errors, name: "Name is required" });
-      //   console.log("undefined name error");
-      valid = false;
-    } else if (formData.name.length < 3) {
-      setErrors({ ...errors, name: "Name is too short" });
-      valid = false;
-    }
-    // if (formData.email === undefined) {
-    //   setErrors({ ...errors, email: "Email is required" });
-    //   valid = false;
-    // } else if (formData.email.length < 5) {
-    //   setErrors({ ...errors, email: "Email is too short" });
-    //   valid = false;
-    // } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-    //   setErrors({ ...errors, email: "Email is invalid" });
-    //   valid = false;
-    // }
-    //  return ;
-    if (valid) {
-      setErrors({});
-    }
-    console.log("after valid", errors);
-
-    return valid;
+export default function ProfileInformationForm({ isEditing, setIsEditing }) {
+  const profilePlaceholder = {
+    firstName: "John",
+    lastName: "Doe",
+    email: "email@example.com",
+    dob: "YYYY-MM-DD",
+    interest: "Choose",
   };
 
+  //redux state
+  const profileDefault = {
+    firstName: "Rawan",
+    lastName: "Aboegila",
+    email: "rawan@example.com",
+    dob: "2000-4-18",
+    interest: "Skate",
+  };
+  //component inner state
+  const [interestsOpen, setInterestsOpen] = useState(false);
+  const [interestsValue, setInterestsValue] = useState(null);
+  const [interests, setInterests] = useState([
+    { label: "Parkour", value: "parkour" },
+    { label: "Skate", value: "skate" },
+    { label: "Both", value: "both" },
+  ]);
+
+  const [formData, setData] = useState({ ...profileDefault });
+  const [errors, setErrors] = useState({});
+
+  DropDownPicker.setListMode("SCROLLVIEW");
+  const validate = () => {
+    const validFirstName = validateItem("firstName", [
+      {
+        value: formData.firstName === undefined || formData.firstName === "",
+        message: "First Name is required",
+      },
+      {
+        value: formData.firstName.length < 3,
+        message: "First Name is too short",
+      },
+    ]);
+    const validLastName = validateItem("lastName", [
+      {
+        value: formData.lastName === undefined || formData.lastName === "",
+        message: "Last Name is required",
+      },
+      {
+        value: formData.lastName.length < 3,
+        message: "last Name is too short",
+      },
+    ]);
+    const validEmail = validateItem("email", [
+      {
+        value: formData.email === undefined || formData.email === "",
+        message: "Email is required",
+      },
+      {
+        value: !/\S+@\S+\.\S+/.test(formData.email),
+        message: "Invalid Email",
+      },
+    ]);
+
+    const validInterest = validateItem("interest", [
+      { value: formData.interest === null, message: "Interest is required" },
+    ]);
+
+    if (validFirstName && validLastName && validEmail && validInterest) {
+      setErrors({});
+      return true;
+    } else {
+      return false;
+    }
+  };
+  function validateItem(itemName, conditions) {
+    for (const condition of conditions) {
+      console.log("condition: ", condition);
+
+      if (condition.value) {
+        console.log(" errors >", errors);
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [itemName]: condition.message,
+        }));
+
+        return false;
+      }
+    }
+    return true;
+  }
+  function onChangeHandler(inputIdentifier, enteredValue) {
+    console.log("onChangeHandler: ", enteredValue);
+    delete errors[inputIdentifier];
+    return setData((currData) => {
+      return { ...currData, [inputIdentifier]: enteredValue };
+    });
+  }
   const onSubmit = () => {
-    validate() ? console.log("Submitted") : console.log("Validation Failed");
+    console.log(formData);
+
+    if (validate()) {
+      console.log("Submitted");
+      setIsEditing(false);
+    } else {
+      console.log("Validation Failed");
+    }
+  };
+  const Update = () => {
+    setIsEditing(true);
   };
 
   return (
     <Center>
       <VStack width="90%" mx="3" maxW="300px">
-        <FormControl isRequired isInvalid={"name" in errors}>
-          <FormControl.Label
-            _text={{
-              bold: true,
-            }}
-          >
-            Name
+        <FormInput
+          defaultValue={profileDefault ? profileDefault.firstName : ""}
+          placeholder={profilePlaceholder.firstName}
+          changeHandler={onChangeHandler.bind(this, "firstName")}
+          label="First Name"
+          isValid={"firstName" in errors}
+          errorMessage={errors.firstName}
+          defaultMessage="First Name should contain atleast 3 character."
+          inputConfig={{
+            isRequired: true,
+            isInvalid: "firstName" in errors,
+            isDisabled: !isEditing,
+          }}
+        />
+        <FormInput
+          defaultValue={profileDefault ? profileDefault.lastName : ""}
+          placeholder={profilePlaceholder.lastName}
+          changeHandler={onChangeHandler.bind(this, "lastName")}
+          label="Last Name"
+          isValid={"lastName" in errors}
+          errorMessage={errors.lastName}
+          defaultMessage="Last Name should contain atleast 3 character."
+          inputConfig={{
+            isRequired: true,
+            isInvalid: "lastName" in errors,
+            isDisabled: !isEditing,
+          }}
+        />
+        <FormInput
+          defaultValue={profileDefault ? profileDefault.email : ""}
+          placeholder={profilePlaceholder.email}
+          changeHandler={onChangeHandler.bind(this, "email")}
+          label="Email"
+          isValid={"email" in errors}
+          errorMessage={errors.email}
+          defaultMessage=""
+          inputConfig={{
+            isRequired: true,
+            isInvalid: "email" in errors,
+            isDisabled: !isEditing,
+          }}
+        />
+        <FormInput
+          defaultValue={profileDefault ? profileDefault.dob : ""}
+          placeholder={profilePlaceholder.dob}
+          changeHandler={onChangeHandler.bind(this, "dob")}
+          label="Date Of Birth"
+          isValid={"dob" in errors}
+          errorMessage={errors.dob}
+          defaultMessage="Date Format :  YYYY-MM-DD"
+          inputConfig={{
+            isRequired: true,
+            isInvalid: "dob" in errors,
+            isDisabled: !isEditing,
+          }}
+        />
+        <FormControl isRequired={true} isDisabled={!isEditing}>
+          <FormControl.Label _text={{ color: "success.800", bold: true }}>
+            Interests
           </FormControl.Label>
-          <Input
-            placeholder="John"
-            onChangeText={(value) => {
-              if (value != "") setData({ ...formData, name: value });
-            }}
-          />
-          {"name" in errors ? (
-            <FormControl.ErrorMessage>{errors.name}</FormControl.ErrorMessage>
+          <View>
+            <DropDownPicker
+              disabledStyle={{
+                backgroundColor: "transparent",
+                borderColor: "#a3a3a3",
+                opacity: 0.25,
+              }}
+              textStyle={{
+                fontSize: 12,
+              }}
+              open={interestsOpen}
+              value={formData.interest}
+              items={interests}
+              setOpen={setInterestsOpen}
+              setValue={setInterestsValue}
+              setItems={setInterests}
+              placeholder={
+                profileDefault
+                  ? profileDefault.interest
+                  : profilePlaceholder.interest
+              }
+              onSelectItem={(value) => onChangeHandler("interest", value.value)}
+              dropDownDirection="TOP"
+              zIndex={3000}
+              zIndexInverse={1000}
+              disabled={!isEditing}
+            />
+          </View>
+          {errors.interest ? (
+            <FormControl.ErrorMessage>
+              {errors.interest}
+            </FormControl.ErrorMessage>
           ) : (
-            <FormControl.HelperText>
-              Name should contain atleast 3 character.
+            <FormControl.HelperText
+              _disabled={{
+                display: "none",
+              }}
+            >
+              Choose an interest
             </FormControl.HelperText>
           )}
         </FormControl>
-        <FormControl isRequired isInvalid={"email" in errors}>
-          <FormControl.Label
-            _text={{
-              bold: true,
-            }}
-          >
-            Email
-          </FormControl.Label>
-          <Input                                           
-            placeholder="john@example.com"
-            onChangeText={(value) => {
-              console.log("email value", value);
-              if (value !== "") setData({ ...formData, email: value });
-            }}
-          />
-          {"email" in errors ? (
-            <FormControl.ErrorMessage>{errors.email}</FormControl.ErrorMessage>
-          ) : (
-            <FormControl.HelperText>
-              {/* Name should contain atleast 3 character. */}
-            </FormControl.HelperText>
-          )}
-        </FormControl>
-        <Button onPress={onSubmit} mt="5" colorScheme="cyan">
+        <Button
+          onPress={onSubmit}
+          mt="3"
+          colorScheme="cyan"
+          style={!isEditing ? { display: "none" } : {}}
+        >
           Submit
         </Button>
       </VStack>

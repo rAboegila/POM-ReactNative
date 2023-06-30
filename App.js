@@ -4,7 +4,7 @@ import { StyleSheet, View, Button } from "react-native";
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 // import { createDrawerNavigator } from "@react-navigation/drawer";
-import { NativeBaseProvider, Text, Box } from "native-base";
+import { NativeBaseProvider, extendTheme, Box } from "native-base";
 import Router from "./src/router";
 import SignIn from "./src/pages/Sign-In/Screen";
 import { Provider } from "react-redux";
@@ -36,10 +36,24 @@ import { store } from "./src/redux/store";
 //   );
 // }
 export default function App() {
+  const theme = extendTheme({
+    components: {
+      Input: {
+        variants: {
+          disabled: ({ colorScheme }) => {
+            return {
+              color: "black",
+              textWeight: "extraBlack",
+            };
+          },
+        },
+      },
+    },
+  });
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <NativeBaseProvider>
+        <NativeBaseProvider theme={theme}>
           {/* <Drawer.Navigator initialRouteName="Home">
           <Drawer.Screen name="Home" component={HomeScreen} />
           <Drawer.Screen name="Notifications" component={NotificationsScreen} />
