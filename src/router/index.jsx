@@ -52,12 +52,12 @@ const Router = () => {
         component={Landing}
       />
       <Stack.Screen
-        options={{ headerShown: true }}
+        options={{ headerShown: false }}
         name="SignIn"
         component={SignIn}
       />
       <Stack.Screen
-        options={{ headerShown: true }}
+        options={{ headerShown: false }}
         name="SignUp"
         component={SignUp}
       />
