@@ -155,6 +155,9 @@ export default function SignIn({ navigation }) {
                 fontWeight: "500",
                 textDecoration: "none",
               }}
+              onPress={()=>{
+                navigation.navigate("ForgotPassword")
+              }}
             >
               Forgot Password
             </Link>

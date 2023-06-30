@@ -7,15 +7,15 @@ export default styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  button:{
-    backgroundColor:"#14ae5c"
-},
-input:{
-  color:"black",
-  padding:5,
-  textAlign:"center",
-  borderWidth:1,
-  borderColor:"grey",
-  borderRadius:5
-}
+  button: {
+    backgroundColor: "#14ae5c",
+  },
+  input: {
+    color: "black",
+    padding: 5,
+    textAlign: "center",
+    borderWidth: 1,
+    borderColor: "grey",
+    borderRadius: 5,
+  },
 });

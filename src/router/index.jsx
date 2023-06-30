@@ -10,6 +10,8 @@ import News from "../pages/News/Screen";
 import Events from "../pages/Events/Screen";
 import Location from "../pages/Location/Screen";
 import SignIn from "../pages/Sign-In/Screen";
+import ForgotPassword from "../pages/Forgot-Password/Screen";
+import ResetPassword from "../pages/Reset-Password/Screen";
 import { useSelector } from "react-redux";
 import { getLoggedIn } from "../redux/features/auth/authSlice";
 
@@ -43,6 +45,11 @@ const Router = () => {
         name="Events"
         component={Events}
       />
+      <Stack.Screen
+      options={{headerShown:false}}
+      name="ResetPassword"
+      component={ResetPassword}
+      />
     </Stack.Navigator>
   ) : (
     <Stack.Navigator>
@@ -52,14 +59,24 @@ const Router = () => {
         component={Landing}
       />
       <Stack.Screen
-        options={{ headerShown: true }}
+        options={{ headerShown: false }}
         name="SignIn"
         component={SignIn}
       />
       <Stack.Screen
-        options={{ headerShown: true }}
+        options={{ headerShown: false }}
         name="SignUp"
         component={SignUp}
+      />
+      <Stack.Screen
+      options={{headerShown: false }}
+      name="ForgotPassword"
+      component={ForgotPassword}
+      />
+      <Stack.Screen
+      options={{headerShown:false}}
+      name="ResetPassword"
+      component={ResetPassword}
       />
     </Stack.Navigator>
   );
