@@ -18,7 +18,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { Pressable } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import DropDownPicker from "react-native-dropdown-picker";
-import {Feather} from '@expo/vector-icons'
+import { Feather } from "@expo/vector-icons";
 import styles from "./styles";
 import axios from "axios";
 
@@ -30,7 +30,7 @@ export default SignUp = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [dob, setDob] = useState(new Date());
-  const [date, setDate] = useState(new Date().toISOString().slice(0,10));
+  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -92,7 +92,7 @@ export default SignUp = ({ navigation }) => {
       const currentDate = selectedDate;
       toggleDatePicker();
       setDob(currentDate);
-      setDate(currentDate.toISOString().slice(0,10));
+      setDate(currentDate.toISOString().slice(0, 10));
     } else {
       toggleDatePicker();
     }
@@ -183,7 +183,7 @@ export default SignUp = ({ navigation }) => {
       errors["interests"] = "Please select interests";
     }
 
-    if(city === null){
+    if (city === null) {
       formIsValid = false;
       errors["city"] = "Please select city";
     }
@@ -195,25 +195,27 @@ export default SignUp = ({ navigation }) => {
   const handleSubmit = async () => {
     setLoading(true);
     if (handleValidation()) {
-      await axios.post("http://192.168.1.8:5000/pom/auth/register",{
-        firstName,
-        lastName,
-        username,
-        email,
-        phoneNumber,
-        dob: dob.toISOString().slice(0, 10),
-        interests: interestsValue,
-        city,
-        password,
-      })
+      await axios
+        .post("http://192.168.1.8:5000/pom/auth/register", {
+          firstName,
+          lastName,
+          username,
+          email,
+          phoneNumber,
+          dob: dob.toISOString().slice(0, 10),
+          interests: interestsValue,
+          city,
+          password,
+        })
         .then(() => {
-          toast.show({title: "Registered Successfully",placement:"top"})
-          navigation.navigate('SignIn');
+          toast.show({ title: "Registered Successfully", placement: "top" });
+          navigation.navigate("SignIn");
         })
         .catch((error) => console.log(error));
     }
     setLoading(false);
   };
+  DropDownPicker.setListMode("SCROLLVIEW");
 
   return (
     <ScrollView w="100%" nestedScrollEnabled>
@@ -352,24 +354,24 @@ export default SignUp = ({ navigation }) => {
                   onChange={changeDate}
                 />
               )}
-                <View>
-                  <Pressable onPress={toggleDatePicker}>
-                    <TextInput
-                      value={date}
-                      style={styles.input}
-                      placeholderTextColor="black"
-                      editable={false}
-                    />
-                  </Pressable>
-                </View>
+              <View>
+                <Pressable onPress={toggleDatePicker}>
+                  <TextInput
+                    value={date}
+                    style={styles.input}
+                    placeholderTextColor="black"
+                    editable={false}
+                  />
+                </Pressable>
+              </View>
             </FormControl>
 
             <Button mt="2" style={styles.button} onPress={handleSubmit}>
-            {loading ? (
-              <Feather name="loader" color="black" size={24} />
-            ) : (
-              <Text>Sign Up</Text>
-            )}
+              {loading ? (
+                <Feather name="loader" color="black" size={24} />
+              ) : (
+                <Text>Sign Up</Text>
+              )}
             </Button>
           </VStack>
         </Box>
