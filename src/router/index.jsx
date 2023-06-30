@@ -16,11 +16,10 @@ import { useSelector } from "react-redux";
 import { getLoggedIn } from "../redux/features/auth/authSlice";
 
 const Router = () => {
-  // const isLoggedIn = useSelector(getLoggedIn);
-  const isLoggedIn = true;
+  const isLoggedIn = useSelector(getLoggedIn);
   const Stack = createNativeStackNavigator();
   return isLoggedIn ? (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="Home">
       <Stack.Screen
         options={{ headerShown: false }}
         name="Home"
@@ -53,7 +52,7 @@ const Router = () => {
       />
     </Stack.Navigator>
   ) : (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="Landing">
       <Stack.Screen
         options={{ headerShown: false }}
         name="Landing"

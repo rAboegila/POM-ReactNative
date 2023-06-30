@@ -5,6 +5,9 @@ import React, { useState } from "react";
 import { Center, VStack, Button, FormControl, View } from "native-base";
 import DropDownPicker from "react-native-dropdown-picker";
 
+//Import Library Objects
+import { INTERESTS } from "../../lib/enums";
+import { toSentenceCase } from "../../lib/helpers";
 //Components Imports
 import FormInput from "./FormInput";
 
@@ -17,7 +20,7 @@ export default function ProfileInformationForm({ isEditing, setIsEditing }) {
     lastName: "Doe",
     email: "email@example.com",
     dob: "YYYY-MM-DD",
-    interest: "Choose",
+    interest: "Choose an interest",
   };
 
   //redux state
@@ -28,13 +31,14 @@ export default function ProfileInformationForm({ isEditing, setIsEditing }) {
     dob: "2000-4-18",
     interest: "Skate",
   };
+
   //component inner state
   const [interestsOpen, setInterestsOpen] = useState(false);
   const [interestsValue, setInterestsValue] = useState(null);
   const [interests, setInterests] = useState([
-    { label: "Parkour", value: "parkour" },
-    { label: "Skate", value: "skate" },
-    { label: "Both", value: "both" },
+    { label: toSentenceCase(INTERESTS.PARKOUR), value: INTERESTS.PARKOUR },
+    { label: toSentenceCase(INTERESTS.SKATE), value: INTERESTS.SKATE },
+    { label: toSentenceCase(INTERESTS.BOTH), value: INTERESTS.BOTH },
   ]);
 
   const [formData, setData] = useState({ ...profileDefault });
