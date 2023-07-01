@@ -5,10 +5,10 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SignUp from "../pages/Sign-Up/Screen";
 import Landing from "../pages/Landing/Screen";
 import Home from "../pages/Home/Screen";
-import MyTickets from "../pages/MyTickets/Screen";
-import News from "../pages/News/Screen";
-import Events from "../pages/Events/Screen";
-import Location from "../pages/Location/Screen";
+// import MyTickets from "../pages/MyTickets/Screen";
+// import News from "../pages/News/Screen";
+// import Events from "../pages/Events/Screen";
+// import Location from "../pages/Location/Screen";
 import SignIn from "../pages/Sign-In/Screen";
 import { useSelector } from "react-redux";
 import { getLoggedIn } from "../redux/features/auth/authSlice";
@@ -23,7 +23,7 @@ const Router = () => {
         name="Home"
         component={Home}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         options={{ headerShown: true }}
         name="My Tickets"
         component={MyTickets}
@@ -42,7 +42,7 @@ const Router = () => {
         options={{ headerShown: true }}
         name="Events"
         component={Events}
-      />
+      /> */}
     </Stack.Navigator>
   ) : (
     <Stack.Navigator initialRouteName="Landing">

@@ -2,14 +2,12 @@
 import React, { useState } from "react";
 
 // UI Library and Elements Imports
-import { AntDesign, WarningOutlineIcon } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import {
   Box,
   Text,
-  Icon,
   HStack,
   Center,
-  VStack,
   Avatar,
   IconButton,
   ScrollView,

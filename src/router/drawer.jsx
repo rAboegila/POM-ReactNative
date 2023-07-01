@@ -27,6 +27,10 @@ import Profile from "../pages/Profile/Screen";
 import Contact from "../pages/ContactUs/Screen";
 import About from "../pages/AboutUs/Screen";
 import SignIn from "../pages/Sign-In/Screen";
+import MyTickets from "../pages/MyTickets/Screen";
+import News from "../pages/News/Screen";
+import Events from "../pages/Events/Screen";
+import Location from "../pages/Location/Screen";
 
 //Import Components
 import DrawerIcon from "../components/DrawerIcon/component";
@@ -48,12 +52,22 @@ const getIcon = (screenName) => {
 };
 
 function CustomDrawerContent(props) {
+  let renderLength;
+  if (props.state.history[props.state.history.length - 1].status === "open") {
+    if (
+      /^Dashboard/.test(props.state.history[props.state.history.length - 2].key)
+    ) {
+      console.log("Dashboard");
+      renderLength = props.state.routeNames.length - 7;
+    } else {
+      renderLength = props.state.routeNames.length - 3;
+    }
+  }
   return (
     <DrawerContentScrollView {...props} safeArea>
       <VStack space="6" my="2" mx="1">
         <HStack space={2} mx="5">
           <DrawerIcon navigation={props.navigation} iconSize={"md"} />
-
           <Box px="4">
             <Text bold color="gray.700">
               Hello {name} !
@@ -66,9 +80,7 @@ function CustomDrawerContent(props) {
         <VStack divider={<Divider />} space="4">
           <VStack space="3">
             {props.state.routeNames.map((name, index) => {
-              const length = props.state.routeNames.length - 3;
-
-              if (name !== "Dashboard" && index < length) {
+              if (name !== "Dashboard" && index < renderLength) {
                 return (
                   <Pressable
                     key={name}
@@ -188,6 +200,29 @@ export default function DrawerRouter() {
       <Drawer.Screen name="Dashboard" component={Dashboard} />
       <Drawer.Screen name="My Profile" component={Profile} />
       <Drawer.Screen name="My Scores" component={MyScores} />
+
+      {/*
+        ////////
+         Dashboard Drawer Links! 
+        ////////
+        */}
+      <Drawer.Screen name="My Tickets" component={MyTickets} />
+      <Drawer.Screen
+        options={{ headerShown: true }}
+        name="Locations"
+        component={Location}
+      />
+      <Drawer.Screen
+        options={{ headerShown: true }}
+        name="News"
+        component={News}
+      />
+      <Drawer.Screen
+        options={{ headerShown: true }}
+        name="Events"
+        component={Events}
+      />
+
       {/*
         ////////
          Fixed Drawer Links! 
