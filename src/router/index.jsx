@@ -17,8 +17,8 @@ import { getLoggedIn } from "../redux/features/auth/authSlice";
 import EventDetails from "../pages/Event-Details/Screen";
 
 const Router = () => {
-  // const isLoggedIn = useSelector(getLoggedIn);
-  const isLoggedIn =true
+  const isLoggedIn = useSelector(getLoggedIn);
+  // const isLoggedIn =true
   const Stack = createNativeStackNavigator();
   return isLoggedIn ? (
     <Stack.Navigator initialRouteName="Home">
