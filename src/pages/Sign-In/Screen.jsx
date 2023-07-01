@@ -22,6 +22,7 @@ import {
   setToken,
 } from "../../redux/features/auth/authSlice";
 import { useDispatch} from "react-redux";
+import api from "../../lib/api";
 
 export default function SignIn({ navigation }) {
   const toast = useToast();
@@ -53,8 +54,8 @@ export default function SignIn({ navigation }) {
   const SignIn = async () => {
     setLoading(true);
     if (handleValidation()) {
-      await axios
-        .post("http://192.168.1.8:5000/pom/auth/login", { email, password })
+      await api
+        .post("auth/login", { email, password })
         .then((res) => {
           setLoading(false);
           dispatch(loggedInUpdated(true))

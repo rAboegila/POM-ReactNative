@@ -14,6 +14,11 @@ import {
   ScrollView,
   useToast,
 } from "native-base";
+
+//Import Library Objects
+import { INTERESTS, GOVERNMENTS } from "../../lib/enums";
+import { toSentenceCase } from "../../lib/helpers";
+
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Pressable } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
@@ -21,6 +26,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { Feather } from "@expo/vector-icons";
 import styles from "./styles";
 import axios from "axios";
+import api from "../../lib/api";
 
 export default SignUp = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
@@ -38,41 +44,74 @@ export default SignUp = ({ navigation }) => {
   const [cityOpen, setCityOpen] = useState(false);
   const [city, setCity] = useState("");
   const [cities, setCities] = useState([
-    { label: "Cairo", value: "Cairo" },
-    { label: "Giza", value: "Giza" },
-    { label: "Alexandria", value: "Alexandria" },
-    { label: "Luxor", value: "Luxor" },
-    { label: "Aswan", value: "Aswan" },
-    { label: "Suez", value: "Suez" },
-    { label: "Ismailia", value: "Ismailia" },
-    { label: "Port Said", value: "Port Said" },
-    { label: "Damietta", value: "Damietta" },
-    { label: "Dakahlia", value: "Dakahlia" },
-    { label: "Sharqia", value: "Sharqia" },
-    { label: "Qalyubia", value: "Qalyubia" },
-    { label: "Gharbia", value: "Gharbia" },
-    { label: "Kafr El Sheikh", value: "Kafr El Sheikh" },
-    { label: "Monufia", value: "Monufia" },
-    { label: "Beheira", value: "Beheira" },
-    { label: "Minya", value: "Minya" },
-    { label: "Beni Suef", value: "Beni Suef" },
-    { label: "Faiyum", value: "Faiyum" },
-    { label: "New Valley", value: "New Valley" },
-    { label: "Asyut", value: "Asyut" },
-    { label: "Red Sea", value: "Red Sea" },
-    { label: "Sohag", value: "Sohag" },
-    { label: "Qena", value: "Qena" },
-    { label: "Matruh", value: "Matruh" },
-    { label: "North Sinai", value: "North Sinai" },
-    { label: "South Sinai", value: "South Sinai" },
-    { label: "Helwan", value: "Helwan" },
+    { label: toSentenceCase(GOVERNMENTS.CAIRO), value: GOVERNMENTS.CAIRO },
+    { label: toSentenceCase(GOVERNMENTS.GIZA), value: GOVERNMENTS.GIZA },
+    {
+      label: toSentenceCase(GOVERNMENTS.ALEXANDRIA),
+      value: GOVERNMENTS.ALEXANDRIA,
+    },
+    { label: toSentenceCase(GOVERNMENTS.LUXOR), value: GOVERNMENTS.LUXOR },
+    { label: toSentenceCase(GOVERNMENTS.ASWAN), value: GOVERNMENTS.ASWAN },
+    { label: toSentenceCase(GOVERNMENTS.SUEZ), value: GOVERNMENTS.SUEZ },
+    {
+      label: toSentenceCase(GOVERNMENTS.ISMAILIA),
+      value: GOVERNMENTS.ISMAILIA,
+    },
+    {
+      label: toSentenceCase(GOVERNMENTS.PORT_SAID),
+      value: GOVERNMENTS.PORT_SAID,
+    },
+    {
+      label: toSentenceCase(GOVERNMENTS.DAMIETTA),
+      value: GOVERNMENTS.DAMIETTA,
+    },
+    {
+      label: toSentenceCase(GOVERNMENTS.DAKAHLIA),
+      value: GOVERNMENTS.DAKAHLIA,
+    },
+    { label: toSentenceCase(GOVERNMENTS.SHARQIA), value: GOVERNMENTS.SHARQIA },
+    {
+      label: toSentenceCase(GOVERNMENTS.QALYUBIA),
+      value: GOVERNMENTS.QALYUBIA,
+    },
+    { label: toSentenceCase(GOVERNMENTS.GHARBIA), value: GOVERNMENTS.GHARBIA },
+    {
+      label: toSentenceCase(GOVERNMENTS.KAFR_ELSHEIKH),
+      value: GOVERNMENTS.KAFR_EL_SHEIKH,
+    },
+    { label: toSentenceCase(GOVERNMENTS.MONUFIA), value: GOVERNMENTS.MONUFIA },
+    { label: toSentenceCase(GOVERNMENTS.BEHEIRA), value: GOVERNMENTS.BEHEIRA },
+    { label: toSentenceCase(GOVERNMENTS.MINYA), value: GOVERNMENTS.MINYA },
+    {
+      label: toSentenceCase(GOVERNMENTS.BENI_SUEF),
+      value: GOVERNMENTS.BENI_SUEF,
+    },
+    { label: toSentenceCase(GOVERNMENTS.FAIYUM), value: GOVERNMENTS.FAIYUM },
+    {
+      label: toSentenceCase(GOVERNMENTS.NEW_VALLEY),
+      value: GOVERNMENTS.NEW_VALLEY,
+    },
+    { label: toSentenceCase(GOVERNMENTS.ASYUT), value: GOVERNMENTS.ASYUT },
+    { label: toSentenceCase(GOVERNMENTS.RED_SEA), value: GOVERNMENTS.RED_SEA },
+    { label: toSentenceCase(GOVERNMENTS.SOHAG), value: GOVERNMENTS.SOHAG },
+    { label: toSentenceCase(GOVERNMENTS.QENA), value: GOVERNMENTS.QENA },
+    { label: toSentenceCase(GOVERNMENTS.MATRUH), value: GOVERNMENTS.MATRUH },
+    {
+      label: toSentenceCase(GOVERNMENTS.NORTH_SINAI),
+      value: GOVERNMENTS.NORTH_SINAI,
+    },
+    {
+      label: toSentenceCase(GOVERNMENTS.SOUTH_SINAI),
+      value: GOVERNMENTS.SOUTH_SINAI,
+    },
+    { label: toSentenceCase(GOVERNMENTS.HELWAN), value: GOVERNMENTS.HELWAN },
   ]);
   const [interestsOpen, setInterestsOpen] = useState(false);
   const [interestsValue, setInterestsValue] = useState(null);
   const [interests, setInterests] = useState([
-    { label: "Parkour", value: "parkour" },
-    { label: "Skate", value: "skate" },
-    { label: "Both", value: "both" },
+    { label: toSentenceCase(INTERESTS.PARKOUR), value: INTERESTS.PARKOUR },
+    { label: toSentenceCase(INTERESTS.SKATE), value: INTERESTS.SKATE },
+    { label: toSentenceCase(INTERESTS.BOTH), value: INTERESTS.BOTH },
   ]);
   const toast = useToast();
 
@@ -195,8 +234,17 @@ export default SignUp = ({ navigation }) => {
   const handleSubmit = async () => {
     setLoading(true);
     if (handleValidation()) {
-      await axios
-        .post("http://192.168.1.8:5000/pom/auth/register", {
+      // const formData = new FormData();
+      // formData.append("firstName", firstName);
+      // formData.append("lastName", lastName);
+      // formData.append("email", email);
+      // formData.append("password", password);
+      // formData.append("phoneNumber", phoneNumber);
+      // formData.append("dob",dob.toISOString().slice(0, 10))
+      // formData.append("city", city);
+      // formData.append("interests", interestsValue);
+      await api
+        .post("auth/register", {
           firstName,
           lastName,
           username,
@@ -216,9 +264,8 @@ export default SignUp = ({ navigation }) => {
     setLoading(false);
   };
   DropDownPicker.setListMode("SCROLLVIEW");
-
   return (
-    <ScrollView w="100%" nestedScrollEnabled>
+    <ScrollView w="100%">
       <Center>
         <Box safeArea p="2" w="90%" maxW="290" py="8">
           <Heading
@@ -321,24 +368,27 @@ export default SignUp = ({ navigation }) => {
               ) : null}
             </FormControl>
             <FormControl>
-              <FormControl.Label>City</FormControl.Label>
-              <View>
-                <DropDownPicker
-                  style={styles.dropdown}
-                  open={cityOpen}
-                  value={city}
-                  items={cities}
-                  setOpen={setCityOpen}
-                  setValue={setCity}
-                  setItems={setCities}
-                  onOpen={onCityOpen}
-                  placeholder="Select Government"
-                  placeholderStyle={styles.placeholderStyles}
-                  dropDownDirection="TOP"
-                  zIndex={1000}
-                  zIndexInverse={3000}
-                />
-              </View>
+              <FormControl.Label>Government</FormControl.Label>
+              <DropDownPicker
+                style={styles.dropdown}
+                open={cityOpen}
+                value={city}
+                items={cities}
+                setOpen={setCityOpen}
+                setValue={setCity}
+                setItems={setCities}
+                onOpen={onCityOpen}
+                placeholder="Select Government"
+                placeholderStyle={styles.placeholderStyles}
+                dropDownDirection="TOP"
+                zIndex={1000}
+                zIndexInverse={3000}
+                searchable={true}
+                listMode="SCROLLVIEW"
+                scrollViewProps={{
+                  nestedScrollEnabled: true,
+                }}
+              />
 
               {errors.city ? (
                 <Text style={{ color: "red" }}>{errors.city}</Text>

@@ -4,9 +4,10 @@ import { Center, Input, FormControl, Button, Box ,useToast} from "native-base";
 import { Feather } from "@expo/vector-icons";
 import axios from "axios";
 import { styles } from "./styles";
+import api from "../../lib/api";
 
 export default function ResetPassword({ navigation,route }) {
-  
+
   const reqToken = route.params.reqToken;
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -46,8 +47,8 @@ export default function ResetPassword({ navigation,route }) {
   const handleSubmit = async () => {
     setLoading(true);
     if (handleValidation()) {
-      await axios
-        .post(`http://192.168.1.8:5000/pom/auth/resetpassword/${reqToken}`, {
+      await api
+        .post(`auth/resetpassword/${reqToken}`, {
           password,
           confirmPassword,
         })

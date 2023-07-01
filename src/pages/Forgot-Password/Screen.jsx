@@ -5,6 +5,7 @@ import { Feather } from "@expo/vector-icons";
 import axios from "axios";
 import { styles } from "./styles";
 import CountDown from "react-native-countdown-component";
+import api from "../../lib/api";
 
 export default function ForgotPassword({navigation}) {
   const [username, setUsername] = useState("");
@@ -42,8 +43,8 @@ export default function ForgotPassword({navigation}) {
   const handleSubmit = async () => {
     setLoading(true);
     if (handleValidation()) {
-      await axios
-        .post("http://192.168.1.8:5000/pom/auth/forgotpassword/user", {
+      await api
+        .post("auth/forgotpassword/user", {
           phoneNumber,
           username,
         })
