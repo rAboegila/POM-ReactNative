@@ -53,8 +53,8 @@ export default function ForgotPassword({navigation}) {
             reqToken:res.data.token
           });
         })
-        .catch(() => {
-          setErrors({ request: "Invalid Credentials" });
+        .catch((error) => {
+          setErrors({ request: error.response.data || "Invalid Credentials" });
         });
     }
     setLoading(false);

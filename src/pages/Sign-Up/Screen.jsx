@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Heading,
@@ -13,22 +13,43 @@ import {
   CheckIcon,
   ScrollView,
   useToast,
+  Image,
 } from "native-base";
 
 //Import Library Objects
 import { INTERESTS, GOVERNMENTS } from "../../lib/enums";
 import { toSentenceCase } from "../../lib/helpers";
-
+import * as ImagePicker from "expo-image-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Pressable } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import DropDownPicker from "react-native-dropdown-picker";
 import { Feather } from "@expo/vector-icons";
 import styles from "./styles";
-import axios from "axios";
 import api from "../../lib/api";
 
 export default SignUp = ({ navigation }) => {
+  const [hasGalleryPermission, requestGalleryPermission] =
+    ImagePicker.useMediaLibraryPermissions();
+  const [profilePicture, setProfilePicture] = useState(null);
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      base64: false,
+    });
+
+    if (!result.canceled) {
+      const fileType = result.assets[0].uri.split(".").pop();
+      setProfilePicture({
+        uri: result.assets[0].uri,
+        type: `${result.assets[0].type}/${fileType}`,
+        name: result.assets[0].uri.substring(
+          result.assets[0].uri.lastIndexOf("/") + 1
+        ),
+      });
+    }
+  };
   const [loading, setLoading] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -41,7 +62,6 @@ export default SignUp = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [errors, setErrors] = useState({});
-  const [cityOpen, setCityOpen] = useState(false);
   const [city, setCity] = useState("");
   const [cities, setCities] = useState([
     { label: toSentenceCase(GOVERNMENTS.CAIRO), value: GOVERNMENTS.CAIRO },
@@ -58,8 +78,8 @@ export default SignUp = ({ navigation }) => {
       value: GOVERNMENTS.ISMAILIA,
     },
     {
-      label: toSentenceCase(GOVERNMENTS.PORT_SAID),
-      value: GOVERNMENTS.PORT_SAID,
+      label: toSentenceCase(GOVERNMENTS.PORTSAID),
+      value: GOVERNMENTS.PORTSAID,
     },
     {
       label: toSentenceCase(GOVERNMENTS.DAMIETTA),
@@ -76,37 +96,36 @@ export default SignUp = ({ navigation }) => {
     },
     { label: toSentenceCase(GOVERNMENTS.GHARBIA), value: GOVERNMENTS.GHARBIA },
     {
-      label: toSentenceCase(GOVERNMENTS.KAFR_ELSHEIKH),
-      value: GOVERNMENTS.KAFR_EL_SHEIKH,
+      label: toSentenceCase(GOVERNMENTS.KAFRELSHEIKH),
+      value: GOVERNMENTS.KAFRELSHEIKH,
     },
     { label: toSentenceCase(GOVERNMENTS.MONUFIA), value: GOVERNMENTS.MONUFIA },
     { label: toSentenceCase(GOVERNMENTS.BEHEIRA), value: GOVERNMENTS.BEHEIRA },
     { label: toSentenceCase(GOVERNMENTS.MINYA), value: GOVERNMENTS.MINYA },
     {
-      label: toSentenceCase(GOVERNMENTS.BENI_SUEF),
-      value: GOVERNMENTS.BENI_SUEF,
+      label: toSentenceCase(GOVERNMENTS.BENISUEF),
+      value: GOVERNMENTS.BENISUEF,
     },
     { label: toSentenceCase(GOVERNMENTS.FAIYUM), value: GOVERNMENTS.FAIYUM },
     {
-      label: toSentenceCase(GOVERNMENTS.NEW_VALLEY),
-      value: GOVERNMENTS.NEW_VALLEY,
+      label: toSentenceCase(GOVERNMENTS.NEWVALLEY),
+      value: GOVERNMENTS.NEWVALLEY,
     },
     { label: toSentenceCase(GOVERNMENTS.ASYUT), value: GOVERNMENTS.ASYUT },
-    { label: toSentenceCase(GOVERNMENTS.RED_SEA), value: GOVERNMENTS.RED_SEA },
+    { label: toSentenceCase(GOVERNMENTS.REDSEA), value: GOVERNMENTS.REDSEA },
     { label: toSentenceCase(GOVERNMENTS.SOHAG), value: GOVERNMENTS.SOHAG },
     { label: toSentenceCase(GOVERNMENTS.QENA), value: GOVERNMENTS.QENA },
     { label: toSentenceCase(GOVERNMENTS.MATRUH), value: GOVERNMENTS.MATRUH },
     {
-      label: toSentenceCase(GOVERNMENTS.NORTH_SINAI),
-      value: GOVERNMENTS.NORTH_SINAI,
+      label: toSentenceCase(GOVERNMENTS.NORTHSINAI),
+      value: GOVERNMENTS.NORTHSINAI,
     },
     {
-      label: toSentenceCase(GOVERNMENTS.SOUTH_SINAI),
-      value: GOVERNMENTS.SOUTH_SINAI,
+      label: toSentenceCase(GOVERNMENTS.SOUTHSINAI),
+      value: GOVERNMENTS.SOUTHSINAI,
     },
     { label: toSentenceCase(GOVERNMENTS.HELWAN), value: GOVERNMENTS.HELWAN },
   ]);
-  const [interestsOpen, setInterestsOpen] = useState(false);
   const [interestsValue, setInterestsValue] = useState(null);
   const [interests, setInterests] = useState([
     { label: toSentenceCase(INTERESTS.PARKOUR), value: INTERESTS.PARKOUR },
@@ -114,14 +133,6 @@ export default SignUp = ({ navigation }) => {
     { label: toSentenceCase(INTERESTS.BOTH), value: INTERESTS.BOTH },
   ]);
   const toast = useToast();
-
-  const onInterestsOpen = useCallback(() => {
-    setCityOpen(false);
-  }, []);
-
-  const onCityOpen = useCallback(() => {
-    setInterestsOpen(false);
-  }, []);
 
   const toggleDatePicker = () => {
     setShowDatePicker(!showDatePicker);
@@ -234,40 +245,39 @@ export default SignUp = ({ navigation }) => {
   const handleSubmit = async () => {
     setLoading(true);
     if (handleValidation()) {
-      // const formData = new FormData();
-      // formData.append("firstName", firstName);
-      // formData.append("lastName", lastName);
-      // formData.append("email", email);
-      // formData.append("password", password);
-      // formData.append("phoneNumber", phoneNumber);
-      // formData.append("dob",dob.toISOString().slice(0, 10))
-      // formData.append("city", city);
-      // formData.append("interests", interestsValue);
+      const formData = new FormData();
+      formData.append("firstName", firstName);
+      formData.append("lastName", lastName);
+      formData.append("username", username);
+      formData.append("email", email);
+      formData.append("password", password);
+      formData.append("phoneNumber", phoneNumber);
+      formData.append("dob", dob.toISOString().slice(0, 10));
+      formData.append("city", city);
+      formData.append("interests", interestsValue);
+      formData.append("profilePic", profilePicture);
       await api
-        .post("auth/register", {
-          firstName,
-          lastName,
-          username,
-          email,
-          phoneNumber,
-          dob: dob.toISOString().slice(0, 10),
-          interests: interestsValue,
-          city,
-          password,
+        .post("auth/register", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
         })
         .then(() => {
           toast.show({ title: "Registered Successfully", placement: "top" });
           navigation.navigate("SignIn");
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          setLoading(false);
+          setErrors({ request: error.response.data.error });
+        });
     }
     setLoading(false);
   };
-  DropDownPicker.setListMode("SCROLLVIEW");
   return (
     <ScrollView w="100%">
       <Center>
         <Box safeArea p="2" w="90%" maxW="290" py="8">
+          {errors.request ? (
+            <Text style={styles.requestErorr}>{errors.request}</Text>
+          ) : null}
           <Heading
             size="lg"
             color="coolGray.800"
@@ -279,61 +289,73 @@ export default SignUp = ({ navigation }) => {
             Register
           </Heading>
           <VStack space={3} mt="5">
-            <FormControl>
+            <FormControl isInvalid={errors.firstName}>
               <FormControl.Label>First Name</FormControl.Label>
               <Input
                 value={firstName}
                 onChangeText={(value) => setFirstName(value)}
               />
               {errors.firstName ? (
-                <Text style={{ color: "red" }}>{errors.firstName}</Text>
+                <FormControl.ErrorMessage>
+                  {errors.firstName}
+                </FormControl.ErrorMessage>
               ) : null}
             </FormControl>
-            <FormControl>
+            <FormControl isInvalid={errors.lastName}>
               <FormControl.Label>Last Name</FormControl.Label>
               <Input
                 value={lastName}
                 onChangeText={(value) => setLastName(value)}
               />
               {errors.lastName ? (
-                <Text style={{ color: "red" }}>{errors.lastName}</Text>
+                <FormControl.ErrorMessage>
+                  {errors.lastName}
+                </FormControl.ErrorMessage>
               ) : null}
             </FormControl>
-            <FormControl>
+            <FormControl isInvalid={errors.username}>
               <FormControl.Label>User Name</FormControl.Label>
               <Input onChangeText={(value) => setUsername(value)} />
               {errors.username ? (
-                <Text style={{ color: "red" }}>{errors.username}</Text>
+                <FormControl.ErrorMessage>
+                  {errors.username}
+                </FormControl.ErrorMessage>
               ) : null}
             </FormControl>
-            <FormControl>
+            <FormControl isInvalid={errors.email}>
               <FormControl.Label>Email</FormControl.Label>
               <Input onChangeText={(value) => setEmail(value)} />
               {errors.email ? (
-                <Text style={{ color: "red" }}>{errors.email}</Text>
+                <FormControl.ErrorMessage>
+                  {errors.email}
+                </FormControl.ErrorMessage>
               ) : null}
             </FormControl>
-            <FormControl>
+            <FormControl isInvalid={errors.password}>
               <FormControl.Label>Password</FormControl.Label>
               <Input
                 type="password"
                 onChangeText={(value) => setPassword(value)}
               />
               {errors.password ? (
-                <Text style={{ color: "red" }}>{errors.password}</Text>
+                <FormControl.ErrorMessage>
+                  {errors.password}
+                </FormControl.ErrorMessage>
               ) : null}
             </FormControl>
-            <FormControl>
+            <FormControl isInvalid={errors.confirmPassword}>
               <FormControl.Label>Confirm Password</FormControl.Label>
               <Input
                 type="password"
                 onChangeText={(value) => setConfirmPassword(value)}
               />
               {errors.confirmPassword ? (
-                <Text style={{ color: "red" }}>{errors.confirmPassword}</Text>
+                <FormControl.ErrorMessage>
+                  {errors.confirmPassword}
+                </FormControl.ErrorMessage>
               ) : null}
             </FormControl>
-            <FormControl>
+            <FormControl isInvalid={errors.phoneNumber}>
               <FormControl.Label>Phone Number</FormControl.Label>
               <Input
                 keyboardType="numeric"
@@ -341,57 +363,51 @@ export default SignUp = ({ navigation }) => {
                 onChangeText={(value) => setPhoneNumber(value)}
               />
               {errors.phoneNumber ? (
-                <Text style={{ color: "red" }}>{errors.phoneNumber}</Text>
+                <FormControl.ErrorMessage>
+                  {errors.phoneNumber}
+                </FormControl.ErrorMessage>
               ) : null}
             </FormControl>
-            <FormControl>
-              <FormControl.Label>Interests</FormControl.Label>
-              <View>
-                <DropDownPicker
-                  style={styles.dropdown}
-                  open={interestsOpen}
-                  value={interestsValue}
-                  items={interests}
-                  setOpen={setInterestsOpen}
-                  setValue={setInterestsValue}
-                  setItems={setInterests}
-                  onOpen={onInterestsOpen}
-                  placeholder="Select Interests"
-                  placeholderStyle={styles.placeholderStyles}
-                  dropDownDirection="TOP"
-                  zIndex={3000}
-                  zIndexInverse={1000}
-                />
-              </View>
-              {errors.interests ? (
-                <Text style={{ color: "red" }}>{errors.interests}</Text>
-              ) : null}
-            </FormControl>
-            <FormControl>
+            <FormControl isInvalid={errors.city}>
               <FormControl.Label>Government</FormControl.Label>
-              <DropDownPicker
-                style={styles.dropdown}
-                open={cityOpen}
-                value={city}
-                items={cities}
-                setOpen={setCityOpen}
-                setValue={setCity}
-                setItems={setCities}
-                onOpen={onCityOpen}
-                placeholder="Select Government"
-                placeholderStyle={styles.placeholderStyles}
-                dropDownDirection="TOP"
-                zIndex={1000}
-                zIndexInverse={3000}
-                searchable={true}
-                listMode="SCROLLVIEW"
-                scrollViewProps={{
-                  nestedScrollEnabled: true,
-                }}
-              />
-
+              <Select
+                placeholder="Government"
+                selectedValue={city}
+                onValueChange={(itemValue) => setCity(itemValue)}
+              >
+                {cities.map((city, index) => (
+                  <Select.Item
+                    label={city.label}
+                    value={city.value}
+                    key={index}
+                  />
+                ))}
+              </Select>
               {errors.city ? (
-                <Text style={{ color: "red" }}>{errors.city}</Text>
+                <FormControl.ErrorMessage>
+                  {errors.city}
+                </FormControl.ErrorMessage>
+              ) : null}
+            </FormControl>
+            <FormControl isInvalid={errors.interests}>
+              <FormControl.Label>Interests</FormControl.Label>
+              <Select
+                placeholder="Interests"
+                selectedValue={interestsValue}
+                onValueChange={(itemValue) => setInterestsValue(itemValue)}
+              >
+                {interests.map((interest, index) => (
+                  <Select.Item
+                    label={interest.label}
+                    value={interest.value}
+                    key={index}
+                  />
+                ))}
+              </Select>
+              {errors.interests ? (
+                <FormControl.ErrorMessage>
+                  {errors.interests}
+                </FormControl.ErrorMessage>
               ) : null}
             </FormControl>
             <FormControl>
@@ -416,6 +432,16 @@ export default SignUp = ({ navigation }) => {
               </View>
             </FormControl>
 
+            <Button onPress={pickImage}>
+              Pick a Profile Picture from camera roll
+            </Button>
+            {profilePicture && (
+              <Image
+                source={{ uri: profilePicture.uri }}
+                alt="profile picture"
+                style={{ width: "100%", height: 200 }}
+              />
+            )}
             <Button mt="2" style={styles.button} onPress={handleSubmit}>
               {loading ? (
                 <Feather name="loader" color="black" size={24} />

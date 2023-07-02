@@ -13,8 +13,6 @@ export default styles = StyleSheet.create({
     flexGrow:1
   },
   filterBtn:{
-    backgroundColor:"#14ae5c",
-    color:"white",
-    borderRadius:5
+    borderRadius:5,
   }
 });

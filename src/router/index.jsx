@@ -43,12 +43,12 @@ const Router = () => {
         component={News}
       />
       <Stack.Screen
-        options={{ headerShown: true }}
+        options={{ headerShown: false }}
         name="Events"
         component={Events}
       />
       <Stack.Screen
-      options={{headerShown:true}}
+      options={{headerShown:false}}
       name="Event Details"
       component={EventDetails}
       />

@@ -18,4 +18,9 @@ export default styles = StyleSheet.create({
     borderColor: "grey",
     borderRadius: 5,
   },
+  requestErorr: {
+    backgroundColor: "#DC354599",
+    padding: 10,
+    borderRadius: 5,
+  },
 });

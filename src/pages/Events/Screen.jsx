@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Text, Box, Button, FlatList ,HStack,VStack} from "native-base";
-import DrawerIcon from "../../components/DrawerIcon/component";
+import { Text, Box, Button, FlatList, HStack, VStack } from "native-base";
 import HomeButton from "../../components/HomeButton/component";
 
 import styles from "./styles";
 import EventCard from "../../components/EventCard/component";
+import DrawerIcon from "../../components/DrawerIcon/component";
 export default function Events({ navigation }) {
   const events = [
     {
@@ -45,7 +45,7 @@ export default function Events({ navigation }) {
     },
   ]; //
 
-  const [renderedEvents, setrenderedEvents]=useState(events);
+  const [renderedEvents, setRenderedEvents] = useState(events);
 
   const routeToDetails = (event) => {
     navigation.navigate("Event Details", { event });
@@ -59,46 +59,55 @@ export default function Events({ navigation }) {
     return diffDays;
   };
 
-  const filterEvents = (filter)=>{
-    let filteredEvents
+  const filterEvents = (filter) => {
+    let filteredEvents;
     switch (filter) {
       case "Week":
-        filteredEvents =events.filter(event=>daysFromNow(event.date)<=7);
-        setrenderedEvents(filteredEvents);
+        filteredEvents = events.filter((event) => daysFromNow(event.date) <= 7);
+        setRenderedEvents(filteredEvents);
         break;
       case "Month":
-        filteredEvents =events.filter(event=>daysFromNow(event.date)<=30);
-        setrenderedEvents(filteredEvents);
+        filteredEvents = events.filter(
+          (event) => daysFromNow(event.date) <= 30
+        );
+        setRenderedEvents(filteredEvents);
         break;
       default:
-        setrenderedEvents(events);
+        setRenderedEvents(events);
         break;
     }
-  }
+  };
 
   return (
     <>
-    {/* <Box safeArea mb="3">
-      <HStack mx="3" my="2">
-        <DrawerIcon navigation={navigation} iconSize={"lg"} />
-      </HStack>
-    </Box> */}
-
-    <Box safeArea style={styles.container}>
-      <HStack mb="3" justifyContent="space-between" width="70%">
-        <Button style={styles.filterBtn} onPress={()=>filterEvents("All")}>All</Button>
-        <Button style={styles.filterBtn} onPress={()=>filterEvents("Week")}>In Week</Button>
-        <Button style={styles.filterBtn} onPress={()=>filterEvents("Month")}>In Month</Button>
-      </HStack>
-        <FlatList  
-        style={styles.list}
-        data={renderedEvents}
-        renderItem={({item})=><EventCard event={item} routeToDetails={routeToDetails}/>}
-        keyExtractor={item=>item.id}
+      {/* <Box safeArea mb="3">
+        <HStack mx="3" my="2">
+          <DrawerIcon navigation={navigation} iconSize={"lg"} />
+        </HStack>
+      </Box> */}
+      <Box safeArea style={styles.container}>
+        <HStack mb="3" justifyContent="space-between" width="70%">
+          <Button colorScheme="green" onPress={() => filterEvents("All")}>
+            All
+          </Button>
+          <Button colorScheme="green" onPress={() => filterEvents("Week")}>
+            In Week
+          </Button>
+          <Button colorScheme="green" onPress={() => filterEvents("Month")}>
+            In Month
+          </Button>
+        </HStack>
+        <FlatList
+          style={styles.list}
+          data={renderedEvents}
+          renderItem={({ item }) => (
+            <EventCard event={item} routeToDetails={routeToDetails} />
+          )}
+          keyExtractor={(item) => item.id}
         />
         {/* {events.map((event)=><EventCard event={event} routeToDetails={routeToDetails}/>)} */}
       </Box>
-    <HomeButton navigation={navigation} />
-  </>
+      <HomeButton navigation={navigation} />
+    </>
   );
 }
