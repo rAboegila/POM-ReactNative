@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 
 // UI Library and Elements Imports
-import { AntDesign } from "@expo/vector-icons";
 import {
   Box,
   Text,
@@ -84,6 +83,7 @@ export default function MyTickets({ navigation }) {
               type={ticket.type}
               date={ticket.date}
               time={ticket.time}
+              navigation={navigation}
               key={ticket.eventTitle + "-ticket_" + index}
             ></TicketCard>
           ))}

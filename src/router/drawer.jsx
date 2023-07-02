@@ -7,6 +7,8 @@ import {
   MaterialCommunityIcons,
   AntDesign,
   MaterialIcons,
+  FontAwesome5,
+  Entypo,
 } from "@expo/vector-icons";
 import {
   Box,
@@ -31,6 +33,7 @@ import MyTickets from "../pages/MyTickets/Screen";
 import News from "../pages/News/Screen";
 import Events from "../pages/Events/Screen";
 import Location from "../pages/Location/Screen";
+import NotFound from "../pages/404/Screen";
 
 //Import Components
 import DrawerIcon from "../components/DrawerIcon/component";
@@ -46,6 +49,14 @@ const getIcon = (screenName) => {
       return <MaterialIcons name="leaderboard" />;
     case "My Profile":
       return <AntDesign name="user" />;
+    case "My Tickets":
+      return <FontAwesome5 name="ticket-alt" />;
+    case "Locations":
+      return <Entypo name="location" />;
+    case "News":
+      return <FontAwesome5 name="newspaper" />;
+    case "Events":
+      return <Entypo name="sports-club" />;
     default:
       return undefined;
   }
@@ -58,9 +69,9 @@ function CustomDrawerContent(props) {
       /^Dashboard/.test(props.state.history[props.state.history.length - 2].key)
     ) {
       console.log("Dashboard");
-      renderLength = props.state.routeNames.length - 7;
+      renderLength = props.state.routeNames.length - 8;
     } else {
-      renderLength = props.state.routeNames.length - 3;
+      renderLength = props.state.routeNames.length - 4;
     }
   }
   return (
@@ -231,6 +242,7 @@ export default function DrawerRouter() {
       <Drawer.Screen name="Contact Us" component={Contact} />
       <Drawer.Screen name="About Us" component={About} />
       <Drawer.Screen name="Sign Out" component={SignIn} />
+      <Drawer.Screen name="NotFound" component={NotFound} />
     </Drawer.Navigator>
   );
 }

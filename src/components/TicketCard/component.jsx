@@ -13,7 +13,14 @@ import CardButton from "../CardButton/component";
 // External Style Sheet Import
 import styles from "./styles";
 
-export default function TicketCard({eventTitle, status, type, date, time, style }) {
+export default function TicketCard({
+  eventTitle,
+  status,
+  type,
+  date,
+  time,
+  navigation,
+}) {
   return (
     <Box style={styles.card}>
       <Text style={styles.eventTitle}>{eventTitle}</Text>
@@ -21,7 +28,7 @@ export default function TicketCard({eventTitle, status, type, date, time, style 
         <Box style={styles.group5}>
           <Box style={styles.infoCard}>
             <Box style={styles.information}>
-              <Box   style={styles.group}>
+              <Box style={styles.group}>
                 <Text style={styles.infoLabel}>Status :</Text>
                 <Text style={styles.infoData}>{status}</Text>
               </Box>
@@ -43,6 +50,7 @@ export default function TicketCard({eventTitle, status, type, date, time, style 
         <CardButton
           onPress={() => {
             console.log("Card Button Pressed");
+            navigation.navigate("NotFound");
           }}
           firstWord={"Enter"}
           secondWord={"Event"}
