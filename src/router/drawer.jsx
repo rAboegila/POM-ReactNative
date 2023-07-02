@@ -27,7 +27,7 @@ import Dashboard from "../pages/Dashboard/Screen";
 import MyScores from "../pages/MyScores/Screen";
 import Profile from "../pages/Profile/Screen";
 import Contact from "../pages/ContactUs/Screen";
-import About from "../pages/AboutUs/Screen";
+// import About from "../pages/AboutUs/Screen";
 import SignIn from "../pages/Sign-In/Screen";
 import MyTickets from "../pages/MyTickets/Screen";
 import News from "../pages/News/Screen";
@@ -69,9 +69,9 @@ function CustomDrawerContent(props) {
       /^Dashboard/.test(props.state.history[props.state.history.length - 2].key)
     ) {
       console.log("Dashboard");
-      renderLength = props.state.routeNames.length - 8;
+      renderLength = props.state.routeNames.length - 7;
     } else {
-      renderLength = props.state.routeNames.length - 4;
+      renderLength = props.state.routeNames.length - 3;
     }
   }
   return (
@@ -89,7 +89,7 @@ function CustomDrawerContent(props) {
           </Box>
         </HStack>
         <VStack divider={<Divider />} space="4">
-          <VStack space="3">
+          <VStack space="1">
             {props.state.routeNames.map((name, index) => {
               if (name !== "Dashboard" && index < renderLength) {
                 return (
@@ -100,7 +100,7 @@ function CustomDrawerContent(props) {
                     rounded="md"
                     bg={
                       index === props.state.index
-                        ? "rgba(6, 182, 212, 0.1)"
+                        ? "rgba(187, 247, 208,0.4)"
                         : "transparent"
                     }
                     onPress={(event) => {
@@ -111,7 +111,7 @@ function CustomDrawerContent(props) {
                       <Icon
                         color={
                           index === props.state.index
-                            ? "primary.500"
+                            ? "green.500"
                             : "green.600"
                         }
                         size="5"
@@ -121,7 +121,7 @@ function CustomDrawerContent(props) {
                         fontWeight="500"
                         color={
                           index === props.state.index
-                            ? "primary.500"
+                            ? "green.600"
                             : "green.900"
                         }
                       >
@@ -133,8 +133,8 @@ function CustomDrawerContent(props) {
               }
             })}
           </VStack>
-          <VStack space="5">
-            <VStack space="3">
+          <VStack space="2">
+            <VStack space="2">
               <Pressable
                 px="5"
                 py="3"
@@ -153,24 +153,7 @@ function CustomDrawerContent(props) {
                   </Text>
                 </HStack>
               </Pressable>
-              <Pressable
-                px="5"
-                py="2"
-                onPress={(event) => {
-                  props.navigation.navigate("About Us");
-                }}
-              >
-                <HStack space="7" alignItems="center">
-                  <Icon
-                    color="green.600"
-                    size="5"
-                    as={<MaterialCommunityIcons name="information" />}
-                  />
-                  <Text color="green.900" fontWeight="500">
-                    About Us
-                  </Text>
-                </HStack>
-              </Pressable>
+
               <Pressable
                 px="5"
                 py="3"
@@ -210,8 +193,8 @@ export default function DrawerRouter() {
         */}
       <Drawer.Screen name="Dashboard" component={Dashboard} />
       <Drawer.Screen name="My Profile" component={Profile} />
-      <Drawer.Screen name="My Scores" component={MyScores} />
-
+      {/* <Drawer.Screen name="My Scores" component={MyScores} />  */}
+      {/* My Scores->Next Phase */}
       {/*
         ////////
          Dashboard Drawer Links! 
@@ -240,7 +223,6 @@ export default function DrawerRouter() {
         ////////
         */}
       <Drawer.Screen name="Contact Us" component={Contact} />
-      <Drawer.Screen name="About Us" component={About} />
       <Drawer.Screen name="Sign Out" component={SignIn} />
       <Drawer.Screen name="NotFound" component={NotFound} />
     </Drawer.Navigator>
