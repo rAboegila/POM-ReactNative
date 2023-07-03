@@ -1,51 +1,59 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { apiToken } from "../../../lib/api";
+// import { apiToken } from "../../../lib/api";
+import axios from "axios";
 import { Announcements } from "../../../lib/types";
 import { GOVERNMENTS, INTERESTS } from "../../../lib/enums";
 
 const initialState = {
   firstName: "",
   lastName: "",
-  dob: "",
-  phoneNumber: "",
+  username: "",
   email: "",
+  profilePic: "",
+  phoneNumber: "",
+  dob: "",
   city: "",
   role: "",
-  resetTokenString: " ",
-  resetTokenDate: "",
   interests: "",
   announcements: [],
+  isSuspended: false,
+  forgotPasswordToken: null,
+  forgotPasswordTokenExpires: null,
   isDirty: false,
 };
 
 //helpers
+
 function setProfile(state, profile) {
   state.firstName = profile.firstName;
   state.lastName = profile.lastName;
-  state.dob = profile.dob;
-  state.phoneNumber = profile.phoneNumber;
+  state.username = profile.username;
   state.email = profile.email;
+  state.profilePic = profile.profilePic;
+  state.phoneNumber = profile.phoneNumber;
+  state.dob = profile.dob;
   state.city = profile.city;
   state.role = profile.role;
-  state.resetTokenString = profile.resetTokenString;
-  state.resetTokenDate = profile.resetTokenDate;
   state.interests = profile.interests;
   state.announcements = profile.announcements;
+  state.isSuspended = profile.isSuspended;
 }
 
 //Thunk Reducers
-const fetchProfile = createAsyncThunk(
+export const fetchProfile = createAsyncThunk(
   //action type string
   "profile/fetchProfile",
   // callback function
   (thunkAPI) => {
-    return apiToken(thunkAPI.getState)
-      .get("auth/me")
+    return axios
+      .get("http://192.168.1.108:5000/pom/auth/me", {
+        headers: { Authorization: "Bearer " + store.getState().auth.token },
+      })
       .then((res) => res.data);
   }
 );
 
-const updateProfile = createAsyncThunk(
+export const updateProfile = createAsyncThunk(
   //action type string
   "profile/updateProfile",
   // callback function
@@ -74,6 +82,7 @@ export const profileSlice = createSlice({
       state.loading = false;
       state.isDirty = false;
       setProfile(state, action.payload);
+      console.log("fetch", state);
       state.error = "";
     });
     builder.addCase(fetchProfile.rejected, (state, action) => {
@@ -99,17 +108,20 @@ export const profileSlice = createSlice({
 export const { profileUpdated } = profileSlice.actions;
 //Slice Getters
 export const getUserInfo = (state) => {
-  if (state.auth.loggedIn) {
-    return {
-      firstName: state.profile.firstName,
-      lastName: state.profile.lastName,
-      dob: state.profile.dob,
-      phoneNumber: state.profile.phoneNumber,
-      email: state.profile.email,
-      city: state.profile.city,
-      interests: state.profile.interests,
-    };
-  }
+  // console.log("get user info\n", state);
+  return state.profile;
+  // firstName: state.profile.firstName,
+  // lastName: state.profile.lastName,
+  // username: state.profile.username,
+  // email: state.profile.email,
+  // profilePic: state.profile.profilePic,
+  // phoneNumber: state.profile.phoneNumber,
+  // dob: state.profile.dob,
+  // city: state.profile.city,
+  // role: state.profile.role,
+  // interests: state.profile.interests,
+  // announcements: state.profile.announcements,
+  // isSuspended: state.profile.isSuspended,
 };
 
 export default profileSlice.reducer;
