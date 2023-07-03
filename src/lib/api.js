@@ -11,7 +11,7 @@ export const apiToken = (getState) =>
       Accept: "application/json",
     },
   });
-}
+
 export default api = axios.create({
   baseURL: baseURL,
   // timeout: 5000,
