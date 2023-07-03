@@ -38,6 +38,10 @@ import NotFound from "../pages/404/Screen";
 //Import Components
 import DrawerIcon from "../components/DrawerIcon/component";
 
+//Redux
+import { useDispatch } from "react-redux";
+import { loggedOut } from "../redux/features/auth/authSlice";
+
 //Variables
 const username = "johnDoeUsername";
 const name = "John";
@@ -63,15 +67,16 @@ const getIcon = (screenName) => {
 };
 
 function CustomDrawerContent(props) {
+  const dispatch = useDispatch();
   let renderLength;
   if (props.state.history[props.state.history.length - 1].status === "open") {
     if (
       /^Dashboard/.test(props.state.history[props.state.history.length - 2].key)
     ) {
       console.log("Dashboard");
-      renderLength = props.state.routeNames.length - 7;
+      renderLength = props.state.routeNames.length - 6;
     } else {
-      renderLength = props.state.routeNames.length - 3;
+      renderLength = props.state.routeNames.length - 2;
     }
   }
   return (
@@ -158,7 +163,7 @@ function CustomDrawerContent(props) {
                 px="5"
                 py="3"
                 onPress={(event) => {
-                  props.navigation.navigate("Sign Out");
+                  dispatch(loggedOut());
                 }}
               >
                 <HStack space="7" alignItems="center">
@@ -223,7 +228,7 @@ export default function DrawerRouter() {
         ////////
         */}
       <Drawer.Screen name="Contact Us" component={Contact} />
-      <Drawer.Screen name="Sign Out" component={SignIn} />
+      {/* <Drawer.Screen name="Sign Out" component={SignIn} /> */}
       <Drawer.Screen name="NotFound" component={NotFound} />
     </Drawer.Navigator>
   );

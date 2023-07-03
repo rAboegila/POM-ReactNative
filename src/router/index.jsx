@@ -14,21 +14,24 @@ import SignIn from "../pages/Sign-In/Screen";
 import ForgotPassword from "../pages/Forgot-Password/Screen";
 import ResetPassword from "../pages/Reset-Password/Screen";
 import { useSelector } from "react-redux";
-import { getLoggedIn } from "../redux/features/auth/authSlice";
+import { getLoggedIn, isAppLoading } from "../redux/features/auth/authSlice";
 import EventDetails from "../pages/Event-Details/Screen";
 
 const Router = () => {
   const isLoggedIn = useSelector(getLoggedIn);
-  // const isLoggedIn =true
+  const isLoading = useSelector(isAppLoading);
+
   const Stack = createNativeStackNavigator();
-  return isLoggedIn ? (
+  return (
     <Stack.Navigator initialRouteName="Home">
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="Home"
-        component={Home}
-      />
-      {/* <Stack.Screen
+      {isLoggedIn ? (
+        <>
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Home"
+            component={Home}
+          />
+          {/* <Stack.Screen
         options={{ headerShown: true }}
         name="My Tickets"
         component={MyTickets}
@@ -48,44 +51,50 @@ const Router = () => {
         name="Events"
         component={Events}
       /> */}
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="Event Details"
-        component={EventDetails}
-      />
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="ResetPassword"
-        component={ResetPassword}
-      />
-    </Stack.Navigator>
-  ) : (
-    <Stack.Navigator initialRouteName="Landing">
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="Landing"
-        component={Landing}
-      />
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="SignIn"
-        component={SignIn}
-      />
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="SignUp"
-        component={SignUp}
-      />
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="ForgotPassword"
-        component={ForgotPassword}
-      />
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="ResetPassword"
-        component={ResetPassword}
-      />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Event Details"
+            component={EventDetails}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="ResetPassword"
+            component={ResetPassword}
+          />
+        </>
+      ) : (
+        <>
+          <>
+            {isLoading && (
+              <Stack.Screen
+                options={{ headerShown: false }}
+                name="Landing"
+                component={Landing}
+              />
+            )}
+          </>
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="SignIn"
+            component={SignIn}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="SignUp"
+            component={SignUp}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="ForgotPassword"
+            component={ForgotPassword}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="ResetPassword"
+            component={ResetPassword}
+          />
+        </>
+      )}
     </Stack.Navigator>
   );
 };
