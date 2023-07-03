@@ -11,11 +11,15 @@ import Home from "../pages/Home/Screen";
 // import Location from "../pages/Location/Screen";
 // import NotFound from "../pages/404/Screen";
 import SignIn from "../pages/Sign-In/Screen";
+import ForgotPassword from "../pages/Forgot-Password/Screen";
+import ResetPassword from "../pages/Reset-Password/Screen";
 import { useSelector } from "react-redux";
 import { getLoggedIn } from "../redux/features/auth/authSlice";
+import EventDetails from "../pages/Event-Details/Screen";
 
 const Router = () => {
   const isLoggedIn = useSelector(getLoggedIn);
+  // const isLoggedIn =true
   const Stack = createNativeStackNavigator();
   return isLoggedIn ? (
     <Stack.Navigator initialRouteName="Home">
@@ -40,12 +44,20 @@ const Router = () => {
         component={News}
       />
       <Stack.Screen
-        options={{ headerShown: true }}
+        options={{ headerShown: false }}
         name="Events"
         component={Events}
       /> */}
-
-
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="Event Details"
+        component={EventDetails}
+      />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="ResetPassword"
+        component={ResetPassword}
+      />
     </Stack.Navigator>
   ) : (
     <Stack.Navigator initialRouteName="Landing">
@@ -63,6 +75,16 @@ const Router = () => {
         options={{ headerShown: false }}
         name="SignUp"
         component={SignUp}
+      />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="ForgotPassword"
+        component={ForgotPassword}
+      />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="ResetPassword"
+        component={ResetPassword}
       />
     </Stack.Navigator>
   );
