@@ -9,7 +9,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { INTERESTS } from "../../lib/enums";
 import { toSentenceCase } from "../../lib/helpers";
 //Components Imports
-import FormInput from "./FormInput";
+import FormInput from "../FormInput/component";
 
 // External Style Sheet Import
 // import styles from "./styles";

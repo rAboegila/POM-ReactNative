@@ -5,45 +5,49 @@ import HomeButton from "../../components/HomeButton/component";
 import styles from "./styles";
 import EventCard from "../../components/EventCard/component";
 import DrawerIcon from "../../components/DrawerIcon/component";
+import api, { apiToken } from "../../lib/api";
+import { useSelector } from "react-redux";
+import { getToken } from "../../redux/features/auth/authSlice";
 export default function Events({ navigation }) {
-  const events = [
-    {
-      id: 1,
-      name: "event",
-      price: 100,
-      date: "2023-7-10",
-      type: "parkour",
-      description:
-        "loremipsumksladakdmklasdklsamdlkaslkdmklsamdlkmaskldmklamsdlkmsalkdmklasmdlkmaslkdmlksamdk",
-    },
-    {
-      id: 2,
-      name: "event",
-      price: 100,
-      date: "2023-7-3",
-      type: "parkour",
-      description:
-        "loremipsumksladakdmklasdklsamdlkaslkdmklsamdlkmaskldmklamsdlkmsalkdmklasmdlkmaslkdmlksamdk",
-    },
-    {
-      id: 3,
-      name: "event",
-      price: 100,
-      date: "2023-8-10",
-      type: "parkour",
-      description:
-        "loremipsumksladakdmklasdklsamdlkaslkdmklsamdlkmaskldmklamsdlkmsalkdmklasmdlkmaslkdmlksamdk",
-    },
-    {
-      id: 4,
-      name: "event",
-      price: 100,
-      date: "2025-8-10",
-      type: "parkour",
-      description:
-        "loremipsumksladakdmklasdklsamdlkaslkdmklsamdlkmaskldmklamsdlkmsalkdmklasmdlkmaslkdmlksamdk",
-    },
-  ]; //
+  const [events, setEvents] = useState([]);
+  // const events = [
+  //   {
+  //     id: 1,
+  //     name: "event",
+  //     price: 100,
+  //     date: "2023-7-10",
+  //     type: "parkour",
+  //     description:
+  //       "loremipsumksladakdmklasdklsamdlkaslkdmklsamdlkmaskldmklamsdlkmsalkdmklasmdlkmaslkdmlksamdk",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "event",
+  //     price: 100,
+  //     date: "2023-7-3",
+  //     type: "parkour",
+  //     description:
+  //       "loremipsumksladakdmklasdklsamdlkaslkdmklsamdlkmaskldmklamsdlkmsalkdmklasmdlkmaslkdmlksamdk",
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "event",
+  //     price: 100,
+  //     date: "2023-8-10",
+  //     type: "parkour",
+  //     description:
+  //       "loremipsumksladakdmklasdklsamdlkaslkdmklsamdlkmaskldmklamsdlkmsalkdmklasmdlkmaslkdmlksamdk",
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "event",
+  //     price: 100,
+  //     date: "2025-8-10",
+  //     type: "parkour",
+  //     description:
+  //       "loremipsumksladakdmklasdklsamdlkaslkdmklsamdlkmaskldmklamsdlkmsalkdmklasmdlkmaslkdmlksamdk",
+  //   },
+  // ]; //
 
   const [renderedEvents, setRenderedEvents] = useState(events);
 
@@ -63,12 +67,12 @@ export default function Events({ navigation }) {
     let filteredEvents;
     switch (filter) {
       case "Week":
-        filteredEvents = events.filter((event) => daysFromNow(event.date) <= 7);
+        filteredEvents = events.filter((event) => daysFromNow(event.duration?.startDate.slice(0, 10) ) <= 7);
         setRenderedEvents(filteredEvents);
         break;
       case "Month":
         filteredEvents = events.filter(
-          (event) => daysFromNow(event.date) <= 30
+          (event) => daysFromNow(event.duration?.startDate.slice(0, 10) ) <= 30
         );
         setRenderedEvents(filteredEvents);
         break;
@@ -78,6 +82,25 @@ export default function Events({ navigation }) {
     }
   };
 
+  const token = useSelector(getToken);
+  const getEvents = async () => {
+    await api
+      .get("Event/events", {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((res) => {
+        // console.log(res.data.data);
+        setEvents(res.data.data);
+        setRenderedEvents(res.data.data);
+      })
+      .catch((err) => console.log(err.response))
+  };
+
+  useEffect(() => {
+    getEvents();
+  }, []);
   return (
     <>
       {/* <Box safeArea mb="3">
@@ -103,7 +126,7 @@ export default function Events({ navigation }) {
           renderItem={({ item }) => (
             <EventCard event={item} routeToDetails={routeToDetails} />
           )}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item._id}
         />
         {/* {events.map((event)=><EventCard event={event} routeToDetails={routeToDetails}/>)} */}
       </Box>

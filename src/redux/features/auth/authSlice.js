@@ -6,7 +6,6 @@ const initialState = {
 };
 
 const setTokenReducer = (state,action)=>{
-  console.log(action.payload,"hi");
   state.token = action.payload;
 }
 const setLoggedInReducer = (state, action) => {
