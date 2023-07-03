@@ -18,7 +18,7 @@ export default function FormInput({
   isValid,
   errorMessage,
   defaultMessage,
-  formData
+  formData,
 }) {
   return (
     <FormControl {...inputConfig}>

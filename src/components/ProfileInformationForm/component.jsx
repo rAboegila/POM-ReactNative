@@ -1,6 +1,8 @@
 //React + React Native Imports
 import React, { useState } from "react";
 
+//APIs Import
+
 // UI Library and Elements Imports
 import { Center, VStack, Button, FormControl, View } from "native-base";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -10,7 +12,7 @@ import { INTERESTS } from "../../lib/enums";
 import { toSentenceCase } from "../../lib/helpers";
 //Components Imports
 import FormInput from "./FormInput";
-
+import CustomDatePicker from "../CustomDatePicker/component";
 // External Style Sheet Import
 // import styles from "./styles";
 
@@ -35,6 +37,7 @@ export default function ProfileInformationForm({ isEditing, setIsEditing }) {
   //component inner state
   const [interestsOpen, setInterestsOpen] = useState(false);
   const [interestsValue, setInterestsValue] = useState(null);
+
   const [interests, setInterests] = useState([
     { label: toSentenceCase(INTERESTS.PARKOUR), value: INTERESTS.PARKOUR },
     { label: toSentenceCase(INTERESTS.SKATE), value: INTERESTS.SKATE },
@@ -43,6 +46,7 @@ export default function ProfileInformationForm({ isEditing, setIsEditing }) {
 
   const [formData, setData] = useState({ ...profileDefault });
   const [errors, setErrors] = useState({});
+  const [showDate, setShowDate] = useState(false);
 
   DropDownPicker.setListMode("SCROLLVIEW");
   const validate = () => {
@@ -111,6 +115,18 @@ export default function ProfileInformationForm({ isEditing, setIsEditing }) {
       return { ...currData, [inputIdentifier]: enteredValue };
     });
   }
+
+  const onChangeDateHandler = (event, selectedDate) => {
+    // const currentDate = selectedDate;
+    setShowDate(false);
+    setData((currData) => {
+      return { ...currData, ["dob"]: selectedDate };
+    });
+  };
+  const toggleDatePicker = () => {
+    console.log("toggleDatePicker");
+    setShowDate((oldSate) => !oldSate);
+  };
   const onSubmit = () => {
     console.log(formData);
 
@@ -170,19 +186,25 @@ export default function ProfileInformationForm({ isEditing, setIsEditing }) {
             isDisabled: !isEditing,
           }}
         />
-        <FormInput
+        <CustomDatePicker
+          show={showDate}
+          date={new Date(formData.dob)}
+          is24Hour={"false"}
+          onChange={onChangeDateHandler}
           defaultValue={profileDefault ? profileDefault.dob : ""}
-          placeholder={profilePlaceholder.dob}
-          changeHandler={onChangeHandler.bind(this, "dob")}
+          placeholder={
+            profileDefault ? profileDefault.dob : profilePlaceholder.dob
+          }
           label="Date Of Birth"
           isValid={"dob" in errors}
           errorMessage={errors.dob}
-          defaultMessage="Date Format :  YYYY-MM-DD"
+          defaultMessage="Edit To Change Date"
           inputConfig={{
             isRequired: true,
             isInvalid: "dob" in errors,
             isDisabled: !isEditing,
           }}
+          toggleDatePicker={toggleDatePicker}
         />
         <FormControl isRequired={true} isDisabled={!isEditing}>
           <FormControl.Label _text={{ color: "success.800", bold: true }}>
@@ -233,7 +255,7 @@ export default function ProfileInformationForm({ isEditing, setIsEditing }) {
         <Button
           onPress={onSubmit}
           mt="3"
-          colorScheme="cyan"
+          colorScheme={"success"}
           style={!isEditing ? { display: "none" } : {}}
         >
           Submit
