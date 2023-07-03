@@ -23,7 +23,7 @@ const Router = () => {
 
   const Stack = createNativeStackNavigator();
   return (
-    <Stack.Navigator initialRouteName="Home">
+    <Stack.Navigator>
       {isLoggedIn ? (
         <>
           <Stack.Screen

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+import { saveToken } from "../../../lib/secureStorage";
 const initialState = {
   loggedIn: false,
   token: null,
@@ -7,8 +7,8 @@ const initialState = {
 };
 
 const setTokenReducer = (state, action) => {
-  console.log(action.payload, "hi");
   state.token = action.payload;
+  saveToken(action.payload);
 };
 const setLoggedInReducer = (state, action) => {
   state.loggedIn = action.payload;
@@ -43,6 +43,7 @@ export const { loggedInUpdated, setAppLoading, setToken, loggedOut, loggedIn } =
 //Slice Getters
 export const getLoggedIn = (state) => state.auth.loggedIn;
 export const getToken = (state) => state.auth.token;
+
 export const isAppLoading = (state) => state.auth.loading;
 
 export default authSlice.reducer;
