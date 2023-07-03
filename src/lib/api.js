@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getSavedToken } from "./secureStorage";
-const baseURL = "http://192.168.1.108:5000/pom/";
-export const apiToken = (getState) =>
+const baseURL = "http://192.168.1.168:5000/pom/";
+export const apiToken = () =>
   axios.create({
     baseURL: baseURL,
     // timeout: 5000,

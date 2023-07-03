@@ -25,7 +25,7 @@ export default function TicketCard({
     <Box style={styles.card}>
       <Text style={styles.eventTitle}>{eventTitle}</Text>
       <Center style={styles.group5Row}>
-        <Box style={styles.group5}>
+        <Box style={styles.group}>
           <Box style={styles.infoCard}>
             <Box style={styles.information}>
               <Box style={styles.group}>
@@ -47,7 +47,7 @@ export default function TicketCard({
             </Box>
           </Box>
         </Box>
-        <CardButton
+        {/* <CardButton
           onPress={() => {
             console.log("Card Button Pressed");
             navigation.navigate("NotFound");
@@ -55,7 +55,7 @@ export default function TicketCard({
           firstWord={"Enter"}
           secondWord={"Event"}
           disabled={false}
-        />
+        /> */}
       </Center>
     </Box>
   );

@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import React from "react";
-import MapView,{LatLng} from "react-native-maps";
+import MapView, { LatLng } from "react-native-maps";
 import {
   MaterialIcons,
   MaterialCommunityIcons,
@@ -13,22 +13,32 @@ import { HStack, VStack, Button, Icon, Box, Heading } from "native-base";
 
 export default function EventDetails({ navigation, route }) {
   const event = route.params.event;
+  console.log(event);
   const eventName = event.name || "Event";
   const eventDate = event.duration.startDate.slice(0, 10) || "TBD";
   const eventPrice = event.price || "Undetermined";
   const eventType = event.competition?.name || "Undetermined";
   const eventDescription = event.description || "To Be Added";
 
-//   // Define the corners of the bounds as LatLng objects
-// const northeast = { latitude: 37.78825, longitude: -122.4324 };
-// const southwest = { latitude: 37.7749, longitude: -122.4194 };
+  //   // Define the corners of the bounds as LatLng objects
+  // const northeast = { latitude: 37.78825, longitude: -122.4324 };
+  // const southwest = { latitude: 37.7749, longitude: -122.4194 };
 
-// // Create the LatLngBoundsLiteral object
-// const latLngBoundsLiteral = { northeast, southwest };
+  // // Create the LatLngBoundsLiteral object
+  // const latLngBoundsLiteral = { northeast, southwest };
 
-// // Create the LatLngBounds object
-// const latLngBounds = new LatLng(latLngBoundsLiteral);
+  // // Create the LatLngBounds object
+  // const latLngBounds = new LatLng(latLngBoundsLiteral);
   return (
+    <>
+      {/* <MapView
+        initialRegion={{
+          latitude: 37.78825,
+          longitude: -122.4324,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+      />  */}
     <Box safeArea style={styles.container}>
       <Heading
         size="2xl"
@@ -40,30 +50,7 @@ export default function EventDetails({ navigation, route }) {
       >
         {eventName}
       </Heading>
-      
-      {/* <MapView
-        onLayout={(event) => {
-          // Get the dimensions of the map container
-          const { width, height } = event.nativeEvent.layout;
 
-          // Fit the map to the bounds
-          mapRef.current.fitBounds(latLngBounds, {
-            edgePadding: {
-              top: 50,
-              right: 50,
-              bottom: 50,
-              left: 50,
-            },
-            animated: true,
-          });
-        }}
-        initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-      /> */}
       {/* <MapView.MapMarker
         coordinate={{ latitude: 37.7749, longitude: -122.4194 }}
         title="San Francisco"
@@ -116,5 +103,7 @@ export default function EventDetails({ navigation, route }) {
         </Button>
       </HStack>
     </Box>
+    </>
+
   );
 }

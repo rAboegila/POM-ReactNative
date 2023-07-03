@@ -212,7 +212,7 @@ export default function DrawerRouter() {
         component={Location}
       />
       <Drawer.Screen
-        options={{ headerShown: true }}
+        options={{ headerShown: false }}
         name="News"
         component={News}
       />

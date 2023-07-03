@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
         width:"90%",
         maxWidth:"90%",
         borderWidth:1,
-        marginBottom:10
+        marginBottom:10,
     },
     viewMore:{
         backgroundColor:"transparent",
