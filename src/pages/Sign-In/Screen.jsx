@@ -17,11 +17,8 @@ import {
 import { MaterialIcons, Feather } from "@expo/vector-icons";
 import styles from "./styles";
 import axios from "axios";
-import {
-  loggedInUpdated,
-  setToken,
-} from "../../redux/features/auth/authSlice";
-import { useDispatch} from "react-redux";
+import { loggedInUpdated, setToken } from "../../redux/features/auth/authSlice";
+import { useDispatch } from "react-redux";
 import api from "../../lib/api";
 
 export default function SignIn({ navigation }) {
@@ -58,14 +55,15 @@ export default function SignIn({ navigation }) {
         .post("auth/login", { email, password })
         .then((res) => {
           setLoading(false);
-          dispatch(loggedInUpdated(true))
-          dispatch(setToken(res.data.token))
-          toast.show({title: "Logged in successfully",placement:"top"})
+          dispatch(loggedInUpdated(true));
+          dispatch(setToken(res.data.token));
+          toast.show({ title: "Logged in successfully", placement: "top" });
         })
         .catch((err) => {
-          console.log(err);
+          if (err.response) console.log("sign In error", err.response.data);
+          else console.log("sign In error", err);
         });
-        setLoading(false);
+      setLoading(false);
     }
   };
 
@@ -156,8 +154,8 @@ export default function SignIn({ navigation }) {
                 fontWeight: "500",
                 textDecoration: "none",
               }}
-              onPress={()=>{
-                navigation.navigate("ForgotPassword")
+              onPress={() => {
+                navigation.navigate("ForgotPassword");
               }}
             >
               Forgot Password

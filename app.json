@@ -11,7 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "config": {
@@ -34,6 +36,8 @@
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
       ]
-    ]
-  }
+    ],
+    "sdkVersion": "48.0.0"
+  },
+  "name": "pom-reactnative-v0.1"
 }

@@ -1,5 +1,5 @@
 //React + React Native Imports
-import React from "react";
+import React, { useEffect } from "react";
 
 // UI Library and Elements Imports
 import { FontAwesome5, Entypo } from "@expo/vector-icons";
@@ -18,10 +18,18 @@ import DrawerIcon from "../../components/DrawerIcon/component";
 import DashboardItem from "../../components/DashboardItem/component";
 import logo from "../../../assets/POM_Logo.jpg";
 
+//Redux
+import { getMemoizedProfile } from "../../redux/features/profile/profileSlice";
+
 // External Style Sheet Import
 import styles from "./styles";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Dashboard({ navigation }) {
+
+  useEffect(() => {
+    console.log("useEffect re-render");
+  });
   return (
     <Box safeArea bg="light.100">
       <HStack mx="3" my="2">
