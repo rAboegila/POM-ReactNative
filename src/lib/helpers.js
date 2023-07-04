@@ -1,3 +1,5 @@
+import { PROFILE_IMAGE_URL } from "./env";
+
 export function createEnum(values) {
   const enumObject = {};
   for (const val of values) {
@@ -14,3 +16,4 @@ export function toSentenceCase(str) {
     })
     .join(" ");
 }
+export const getProfileImageUrl = (image) => PROFILE_IMAGE_URL + image;
