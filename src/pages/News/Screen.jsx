@@ -30,51 +30,26 @@ import { getToken } from "../../redux/features/auth/authSlice";
 export default function News({ navigation }) {
   const [showModal, setShowModal] = useState(false);
   const Filters = ["All", "Public", "Mine"];
-  const [announcements,setAnnouncements] = useState([]);
-  
-  // const announcements = [
-  //   {
-  //     title: "Speed Run",
-  //     body: "Pending",
-  //     image:
-  //       "https://docs.expo.dev/static/images/react-native-community-cli-debugger-ui.png",
-  //   },
-  //   {
-  //     title: "Speed Run2",
-  //     body: "Pending",
-  //     image:
-  //       "https://docs.expo.dev/static/images/react-native-community-cli-debugger-ui.png",
-  //   },
-  //   {
-  //     title: "Speed Run3",
-  //     body: "Pending",
-  //     image:
-  //       "https://docs.expo.dev/static/images/react-native-community-cli-debugger-ui.png",
-  //   },
-  //   {
-  //     title: "Speed Run",
-  //     body: "Pending",
-  //     image:
-  //       "https://docs.expo.dev/static/images/react-native-community-cli-debugger-ui.png",
-  //   },
-  // ];
-  
+  const [announcements, setAnnouncements] = useState([]);
+
   const token = useSelector(getToken);
 
-  async function getAnnouncements(){
-    await api.get("Announcement/announcements/general", {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    })
-    .then((res)=>{
-console.log(res.data.data);
-setAnnouncements(res.data.data)
-    }).catch((err)=>{
-      console.log(err.response.error);
-    })
+  async function getAnnouncements() {
+    await api
+      .get("/administration/announcements/general", {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((res) => {
+        console.log(res.data.data);
+        setAnnouncements(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err.response.error);
+      });
   }
-  // getAnnouncements();
+
   const [modalAnnouncement, setModalAnnouncement] = useState({
     title: "",
     body: "",
@@ -85,10 +60,10 @@ setAnnouncements(res.data.data)
     setModalAnnouncement(announcement);
     setShowModal(true);
   }
-  
-  useEffect(()=>{
-    getAnnouncements()
-  },[])
+
+  useEffect(() => {
+    getAnnouncements();
+  }, []);
   return (
     <>
       <Box safeArea mb="3">
@@ -143,11 +118,15 @@ setAnnouncements(res.data.data)
               <Text style={styles.body}>{modalAnnouncement.body}</Text>
               {modalAnnouncement.image ? (
                 <Image
-                width={"60%"}
-                height={"80%"}
-                resizeMode="contain"
-                  source={{ uri: "http://192.168.1.8:5000/uploads/announcements/images/"+ modalAnnouncement.image }}
-                  alt={ modalAnnouncement.title + " Image"}
+                  width={"60%"}
+                  height={"80%"}
+                  resizeMode="contain"
+                  source={{
+                    uri:
+                      "http://192.168.1.8:5000/uploads/announcements/images/" +
+                      modalAnnouncement.image,
+                  }}
+                  alt={modalAnnouncement.title + " Image"}
                   _alt={{
                     color: "grey",
                   }}
