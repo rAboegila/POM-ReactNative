@@ -46,7 +46,7 @@ export const fetchProfile = createAsyncThunk(
   // callback function
   (thunkAPI) => {
     return axios
-      .get("http://192.168.1.108:5000/pom/auth/me", {
+      .get("http://192.168.1.8:5000/pom/auth/me", {
         headers: { Authorization: "Bearer " + store.getState().auth.token },
       })
       .then((res) => res.data);

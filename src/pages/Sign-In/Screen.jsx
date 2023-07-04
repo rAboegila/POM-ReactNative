@@ -17,11 +17,8 @@ import {
 import { MaterialIcons, Feather } from "@expo/vector-icons";
 import styles from "./styles";
 import axios from "axios";
-import {
-  loggedInUpdated,
-  setToken,
-} from "../../redux/features/auth/authSlice";
-import { useDispatch} from "react-redux";
+import { loggedInUpdated, setToken } from "../../redux/features/auth/authSlice";
+import { useDispatch } from "react-redux";
 import api from "../../lib/api";
 
 export default function SignIn({ navigation }) {
@@ -58,20 +55,26 @@ export default function SignIn({ navigation }) {
         .post("auth/login", { email, password })
         .then((res) => {
           setLoading(false);
-          dispatch(loggedInUpdated(true))
-          dispatch(setToken(res.data.token))
-          toast.show({title: "Logged in successfully",placement:"top"})
+          dispatch(loggedInUpdated(true));
+          dispatch(setToken(res.data.token));
+          toast.show({ title: "Logged in successfully", placement: "top" });
         })
-        .catch((err) => {
-          console.log(err);
-        });
-        setLoading(false);
+        .catch((error) => {
+          console.log(error);
+          setErrors({
+            request: error.response?.data?.error || "Invalid Credentials",
+          });
+        }).finally(()=>{
+          setLoading(false);
+        })
     }
+    setLoading(false);
   };
 
   return (
     <Center w="100%">
       <Box safeArea p="2" py="8" w="90%" maxW="290">
+        
         <Heading
           size="lg"
           fontWeight="600"
@@ -82,9 +85,11 @@ export default function SignIn({ navigation }) {
         >
           Sign In
         </Heading>
-
         <VStack space={3} mt="5">
-          <FormControl>
+        {errors.request ? (
+            <Text style={styles.requestErorr}>{errors.request}</Text>
+          ) : null}
+          <FormControl isInvalid={"email" in errors}>
             <FormControl.Label>Email</FormControl.Label>
             <Input
               value={email}
@@ -93,10 +98,12 @@ export default function SignIn({ navigation }) {
               }}
             />
             {errors.email ? (
-              <Text style={{ color: "red" }}>{errors.email}</Text>
+              <FormControl.ErrorMessage>
+                {errors.email}
+              </FormControl.ErrorMessage>
             ) : null}
           </FormControl>
-          <FormControl>
+          <FormControl isInvalid={"password" in errors}>
             <FormControl.Label>Password</FormControl.Label>
             <Input
               value={password}
@@ -120,7 +127,9 @@ export default function SignIn({ navigation }) {
               }}
             />
             {errors.password ? (
-              <Text style={{ color: "red" }}>{errors.password}</Text>
+              <FormControl.ErrorMessage>
+                {errors.password}
+              </FormControl.ErrorMessage>
             ) : null}
           </FormControl>
           <Button
@@ -128,12 +137,9 @@ export default function SignIn({ navigation }) {
             colorScheme="#14ae5c"
             style={styles.button}
             onPress={SignIn}
+            isLoading={loading}
           >
-            {loading ? (
-              <Feather name="loader" color="black" size={24} />
-            ) : (
-              <Text>Sign In</Text>
-            )}
+            Sign In
           </Button>
           <HStack justifyContent="space-between">
             <Link
@@ -156,8 +162,8 @@ export default function SignIn({ navigation }) {
                 fontWeight: "500",
                 textDecoration: "none",
               }}
-              onPress={()=>{
-                navigation.navigate("ForgotPassword")
+              onPress={() => {
+                navigation.navigate("ForgotPassword");
               }}
             >
               Forgot Password

@@ -1,13 +1,14 @@
 import { View, Text } from "react-native";
 import React, { useState } from "react";
-import { Center, Input, FormControl, Button, Box } from "native-base";
+import { Center, Input, FormControl, Button, Box, Heading } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import axios from "axios";
 import { styles } from "./styles";
 import CountDown from "react-native-countdown-component";
 import api from "../../lib/api";
+import GoBackButton from "../../components/GoBackButton/component";
 
-export default function ForgotPassword({navigation}) {
+export default function ForgotPassword({ navigation }) {
   const [username, setUsername] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [loading, setLoading] = useState(false);
@@ -49,55 +50,69 @@ export default function ForgotPassword({navigation}) {
           username,
         })
         .then((res) => {
-          navigation.navigate("ResetPassword",{
-            reqToken:res.data.token
+          navigation.navigate("ResetPassword", {
+            reqToken: res.data.token,
           });
         })
         .catch((error) => {
-          setErrors({ request: error.response.data || "Invalid Credentials" });
+          setErrors({ request: error.response?.data || "Invalid Credentials" });
         });
     }
     setLoading(false);
   };
   return (
-    <Center>
-      {/* <CountDown
+    <Box safeArea>
+      <GoBackButton navigation={navigation} />
+      <Center>
+        {/* <CountDown
       until={180}
       /> */}
-      <Box safeArea p="2" w="90%" maxW="290" py="8">
-        {errors.request ? (
-          <Text style={styles.requestErorr}>{errors.request}</Text>
-        ) : null}
-        <FormControl>
-          <FormControl.Label>User Name</FormControl.Label>
-          <Input
-            value={username}
-            onChangeText={(value) => setUsername(value)}
-          />
-          {errors.username ? (
-            <Text style={{ color: "red" }}>{errors.username}</Text>
+        <Heading
+          size="lg"
+          color="coolGray.800"
+          _dark={{
+            color: "warmGray.50",
+          }}
+          fontWeight="semibold"
+        >
+          Forgot Password
+        </Heading>
+        <Box safeArea p="2" w="90%" maxW="290" py="8">
+          {errors.request ? (
+            <Text style={styles.requestErorr}>{errors.request}</Text>
           ) : null}
-        </FormControl>
-        <FormControl>
-          <FormControl.Label>Phone Number</FormControl.Label>
-          <Input
-            keyboardType="numeric"
-            value={phoneNumber}
-            onChangeText={(value) => setPhoneNumber(value)}
-          />
-          {errors.phoneNumber ? (
-            <Text style={{ color: "red" }}>{errors.phoneNumber}</Text>
-          ) : null}
-        </FormControl>
+          <FormControl>
+            <FormControl.Label>User Name</FormControl.Label>
+            <Input
+              value={username}
+              onChangeText={(value) => setUsername(value)}
+            />
+            {errors.username ? (
+              <Text style={{ color: "red" }}>{errors.username}</Text>
+            ) : null}
+          </FormControl>
+          <FormControl>
+            <FormControl.Label>Phone Number</FormControl.Label>
+            <Input
+              keyboardType="numeric"
+              value={phoneNumber}
+              onChangeText={(value) => setPhoneNumber(value)}
+            />
+            {errors.phoneNumber ? (
+              <Text style={{ color: "red" }}>{errors.phoneNumber}</Text>
+            ) : null}
+          </FormControl>
 
-        <Button mt="2" style={styles.button} onPress={handleSubmit}>
-          {loading ? (
-            <Feather name="loader" color="black" size={24} />
-          ) : (
-            <Text>Retrieve Password</Text>
-          )}
-        </Button>
-      </Box>
-    </Center>
+          <Button
+            mt="2"
+            style={styles.button}
+            isLoading={loading}
+            onPress={handleSubmit}
+          >
+            Retrieve Password
+          </Button>
+        </Box>
+      </Center>
+    </Box>
   );
 }

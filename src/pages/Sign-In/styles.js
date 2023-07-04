@@ -10,4 +10,9 @@ export default styles = StyleSheet.create({
   button: {
     backgroundColor: "#14ae5c",
   },
+  requestErorr: {
+    backgroundColor: "#DC354599",
+    padding: 10,
+    borderRadius: 5,
+  },
 });

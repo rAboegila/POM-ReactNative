@@ -25,28 +25,6 @@ import styles from "./styles";
 import { governments, interests } from "../../lib/dropDownValues";
 
 export default function RegisterForm({ navigation }) {
-  const [hasGalleryPermission, requestGalleryPermission] =
-    ImagePicker.useMediaLibraryPermissions();
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      base64: false,
-    });
-
-    if (!result.canceled) {
-      const fileType = result.assets[0].uri.split(".").pop();
-      setProfilePicture({
-        uri: result.assets[0].uri,
-        type: `${result.assets[0].type}/${fileType}`,
-        name: result.assets[0].uri.substring(
-          result.assets[0].uri.lastIndexOf("/") + 1
-        ),
-      });
-    }
-  };
-
   // for user feedback
   const [loading, setLoading] = useState(false);
   const toast = useToast();
@@ -77,6 +55,29 @@ export default function RegisterForm({ navigation }) {
 //       console.log(result);
 //     }
 //   }, []);
+
+// const [hasGalleryPermission, requestGalleryPermission] =
+  //   ImagePicker.useMediaLibraryPermissions();
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      base64: false,
+    });
+
+    if (!result.canceled) {
+      const fileType = result.assets[0].uri.split(".").pop();
+      setProfilePicture({
+        uri: result.assets[0].uri,
+        type: `${result.assets[0].type}/${fileType}`,
+        name: result.assets[0].uri.substring(
+          result.assets[0].uri.lastIndexOf("/") + 1
+        ),
+      });
+    }
+  };
+
   const toggleDatePicker = () => {
     setShowDatePicker(!showDatePicker);
   };
@@ -101,6 +102,9 @@ export default function RegisterForm({ navigation }) {
     } else if (firstName.length < 3 || firstName.length > 10) {
       formIsValid = false;
       errors["firstName"] = "First name must be between 3 and 10 characters";
+    }else if(" " in firstName){
+      formIsValid = false;
+      errors["firstName"] = "No Empty Spaces Allowed"
     }
 
     // Last name validation
@@ -110,6 +114,9 @@ export default function RegisterForm({ navigation }) {
     } else if (lastName.length < 3 || lastName.length > 10) {
       formIsValid = false;
       errors["lastName"] = "Last name must be between 3 and 10 characters";
+    }else if(" " in lastName){
+      formIsValid = false;
+      errors["lastName"] = "No Empty Spaces Allowed"
     }
 
     // Username validation
@@ -119,6 +126,9 @@ export default function RegisterForm({ navigation }) {
     } else if (username.length < 3 || username.length > 10) {
       formIsValid = false;
       errors["username"] = "Username must be between 3 and 10 characters";
+    }else if(" " in username){
+      formIsValid = false;
+      errors["username"] = "No Empty Spaces Allowed"
     }
 
     // Email validation (optional)
@@ -216,11 +226,13 @@ export default function RegisterForm({ navigation }) {
           setLoading(false);
         });
     }
+    setLoading(false);
   };
+
   return (
     <ScrollView w="100%">
       <Center>
-        <Box safeArea p="2" w="90%" maxW="290" py="8">
+        <Box safeArea p="2" w="80%"  py="8">
           {errors.request ? (
             <Text style={styles.requestErorr}>{errors.request}</Text>
           ) : null}

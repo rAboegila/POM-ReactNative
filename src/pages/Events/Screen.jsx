@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, Box, Button, FlatList, HStack, VStack } from "native-base";
+import { Text, Box, Button, FlatList, HStack, VStack, Center } from "native-base";
 import HomeButton from "../../components/HomeButton/component";
 
 import styles from "./styles";
@@ -92,8 +92,8 @@ export default function Events({ navigation }) {
       })
       .then((res) => {
         // console.log(res.data.data);
-        setEvents(res.data.data);
         setRenderedEvents(res.data.data);
+        setEvents(res.data.data);
       })
       .catch((err) => console.log(err.response))
   };
@@ -124,7 +124,9 @@ export default function Events({ navigation }) {
           style={styles.list}
           data={renderedEvents}
           renderItem={({ item }) => (
-            <EventCard event={item} routeToDetails={routeToDetails} />
+            <Center>
+              <EventCard event={item} routeToDetails={routeToDetails} />
+            </Center>
           )}
           keyExtractor={(item) => item._id}
         />
