@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, Box, Button, FlatList, HStack, VStack, Center } from "native-base";
+import { Text, Box, Button, FlatList, HStack, Center } from "native-base";
 import HomeButton from "../../components/HomeButton/component";
 
 import styles from "./styles";
@@ -67,12 +67,14 @@ export default function Events({ navigation }) {
     let filteredEvents;
     switch (filter) {
       case "Week":
-        filteredEvents = events.filter((event) => daysFromNow(event.duration?.startDate.slice(0, 10) ) <= 7);
+        filteredEvents = events.filter(
+          (event) => daysFromNow(event.duration?.startDate.slice(0, 10)) <= 7
+        );
         setRenderedEvents(filteredEvents);
         break;
       case "Month":
         filteredEvents = events.filter(
-          (event) => daysFromNow(event.duration?.startDate.slice(0, 10) ) <= 30
+          (event) => daysFromNow(event.duration?.startDate.slice(0, 10)) <= 30
         );
         setRenderedEvents(filteredEvents);
         break;
@@ -95,7 +97,7 @@ export default function Events({ navigation }) {
         setRenderedEvents(res.data.data);
         setEvents(res.data.data);
       })
-      .catch((err) => console.log(err.response))
+      .catch((err) => console.log(err.response.data));
   };
 
   useEffect(() => {

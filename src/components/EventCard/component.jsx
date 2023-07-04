@@ -20,7 +20,7 @@ import { styles } from "./styles";
 
 export default function EventCard({ event, routeToDetails }) {
   const eventName = event.name || "Event";
-  const eventDate = event.duration.startDate.slice(0,10) || "TBD";
+  const eventDate = event.duration.startDate.slice(0, 10) || "TBD";
   const eventPrice = event.price || getPrice();
   const eventType = event.competition?.name || "Undetermined";
 
@@ -31,9 +31,9 @@ export default function EventCard({ event, routeToDetails }) {
     return prices[randomIndex];
   }
   return (
-    <Box style={styles.card}>
+    <Box style={styles.card} shadow={2}>
       <VStack space="4">
-        <Heading px="4" pt="4" style={styles.text}>
+        <Heading px="4" pt="4" style={styles.text} size={"md"}>
           {eventName}
         </Heading>
         <HStack space="3" justifyContent="space-between" padding="3">

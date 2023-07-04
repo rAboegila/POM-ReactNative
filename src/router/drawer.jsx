@@ -39,12 +39,16 @@ import NotFound from "../pages/404/Screen";
 import DrawerIcon from "../components/DrawerIcon/component";
 
 //Redux
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loggedOut } from "../redux/features/auth/authSlice";
+import {
+  getMemoizedProfile,
+  getFirstName,
+  getUserName,
+} from "../redux/features/profile/profileSlice";
 
 //Variables
-const username = "johnDoeUsername";
-const name = "John";
+
 const Drawer = createDrawerNavigator();
 
 const getIcon = (screenName) => {
@@ -68,12 +72,15 @@ const getIcon = (screenName) => {
 
 function CustomDrawerContent(props) {
   const dispatch = useDispatch();
+  // const profile = useSelector(getMemoizedProfile);
+  const username = useSelector(getUserName);
+  const name = useSelector(getFirstName);
+
   let renderLength;
   if (props.state.history[props.state.history.length - 1].status === "open") {
     if (
       /^Dashboard/.test(props.state.history[props.state.history.length - 2].key)
     ) {
-      console.log("Dashboard");
       renderLength = props.state.routeNames.length - 6;
     } else {
       renderLength = props.state.routeNames.length - 2;
@@ -89,7 +96,7 @@ function CustomDrawerContent(props) {
               Hello {name} !
             </Text>
             <Text fontSize="14" mt="1" color="gray.500" fontWeight="500">
-              {username}
+              @{username}
             </Text>
           </Box>
         </HStack>

@@ -36,6 +36,7 @@ import { store } from "./src/redux/store";
 //   );
 // }
 export default function App() {
+  console.log("APP START");
   const theme = extendTheme({
     components: {
       Input: {

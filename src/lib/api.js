@@ -6,7 +6,7 @@ export const apiToken = () =>
     baseURL: baseURL,
     // timeout: 5000,
     headers: {
-      Authorization: getSavedToken() ? "Bearer " + getSavedToken() : null,
+      Authorization: "Bearer " + getSavedToken(),
       "Content-Type": "application/json",
       Accept: "application/json",
     },
