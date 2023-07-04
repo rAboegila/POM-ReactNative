@@ -1,6 +1,7 @@
 import axios from "axios";
 import { getSavedToken } from "./secureStorage";
-const baseURL = "http://192.168.1.19:5000/pom/";
+import { LOCAL_BASE_URL, DEPLOY_BASE_URL } from "../lib/env";
+const baseURL = LOCAL_BASE_URL;
 export const apiToken = () =>
   axios.create({
     baseURL: baseURL,
