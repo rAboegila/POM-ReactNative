@@ -27,14 +27,16 @@ import NewsModal from "../../components/NewsModal/component";
 import api from "../../lib/api";
 import { useSelector } from "react-redux";
 import { getToken } from "../../redux/features/auth/authSlice";
+import { getAnnouncements } from "../../redux/features/profile/profileSlice";
 export default function News({ navigation }) {
   const [showModal, setShowModal] = useState(false);
   const Filters = ["All", "Public", "Mine"];
   const [announcements, setAnnouncements] = useState([]);
+  const [userAnnouncements, setUserAnnouncements] = useState(useSelector(getAnnouncements));
+  const [generalAnnouncements, setGeneralAnnouncements] = useState([]);
 
   const token = useSelector(getToken);
-
-  async function getAnnouncements() {
+  async function getGeneralAnnouncements() {
     await api
       .get("/administration/announcements/general", {
         headers: {
@@ -43,7 +45,7 @@ export default function News({ navigation }) {
       })
       .then((res) => {
         console.log(res.data.data);
-        setAnnouncements(res.data.data);
+        setGeneralAnnouncements(res.data.data);
       })
       .catch((err) => {
         console.log(err.response.error);
@@ -61,8 +63,22 @@ export default function News({ navigation }) {
     setShowModal(true);
   }
 
+  function renderAnnouncements(filter){
+    switch (filter) {
+      case "Public":
+        setAnnouncements(generalAnnouncements)
+        break;
+      case "Mine":
+        setAnnouncements(userAnnouncements)
+        break;
+      default:
+        setAnnouncements([...generalAnnouncements,...userAnnouncements])
+        break;
+    }
+  }
   useEffect(() => {
-    getAnnouncements();
+    getGeneralAnnouncements();
+    renderAnnouncements("All");
   }, []);
   return (
     <>
@@ -77,7 +93,7 @@ export default function News({ navigation }) {
             <FilterItem
               style={styles.filterItem}
               label={label}
-              onPress={() => console.log(label, "Button")}
+              onPress={() => renderAnnouncements(label)}
               disabled={false}
               key={label + "_" + index}
             ></FilterItem>
