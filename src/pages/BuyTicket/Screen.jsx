@@ -151,7 +151,7 @@ export default function BuyTicket({ navigation, route }) {
             onPress={Submit}
             isLoading={loading}
           >
-            Sign In
+            Checkout
           </Button>
         </VStack>
       </Box>

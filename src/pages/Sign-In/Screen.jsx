@@ -64,6 +64,7 @@ export default function SignIn({ navigation }) {
           setErrors({
             request: error.response?.data?.error || "Invalid Credentials",
           });
+          setLoading(false);
         }).finally(()=>{
           setLoading(false);
         })

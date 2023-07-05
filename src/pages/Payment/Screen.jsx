@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import React, { useState } from "react";
-import { Box, Button } from "native-base";
+import { Box, Button, useToast } from "native-base";
 import {
   CardField,
   CardForm,
@@ -10,12 +10,13 @@ import {
 } from "@stripe/stripe-react-native";
 import { apiToken } from "../../lib/api";
 
-export default function Payment({navigation,route}) {
+export default function Payment({ navigation, route }) {
   const { createPaymentMethod } = useStripe();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [cardDetails, setCardDetails] = useState(null);
   const ticketId = route.params.ticketId;
+  const toast = useToast();
 
   const handlePayment = async () => {
     setIsLoading(true);
@@ -35,24 +36,29 @@ export default function Payment({navigation,route}) {
       if (error) {
         setErrorMessage(error.message);
       } else {
-        console.log(paymentMethod);
         const tokenInstance = await apiToken();
         tokenInstance
-          .post(
-            `TicketPayment/create-payment-intent/ticket/${ticketId}`,
-            {
-              amount: 1000,
-              token: paymentMethod.id,
-            }
-          )
-          .then((response) => console.log(response))
-          .catch((err) => console.log(err));
+          .post(`TicketPayment/create-payment-intent/ticket/${ticketId}`, {
+            amount: 1000,
+            token: "tok_visa",
+          })
+          .then((response) => {
+            toast.show({ title: "Payemnt Success", placement: "top" });
+            navigation.navigate("My Tickets");
+          })
+          .catch((err) => {
+            console.log(err);
+            toast.show({ title: "Payemnt Failed", placement: "top" });
+            setIsLoading(false);
+          });
       }
     } catch (error) {
       setErrorMessage(error.message);
+      setIsLoading(false);
     } finally {
       setIsLoading(false);
     }
+    setIsLoading(false);
   };
   return (
     <Box safeArea>

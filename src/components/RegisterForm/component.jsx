@@ -221,6 +221,7 @@ export default function RegisterForm({ navigation }) {
           setErrors({
             request: error.response?.data?.error || "Invalid Register",
           });
+          setLoading(false);
         })
         .finally(() => {
           setLoading(false);
