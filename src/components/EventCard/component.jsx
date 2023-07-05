@@ -22,7 +22,7 @@ export default function EventCard({ event, routeToDetails }) {
   const eventName = event.name || "Event";
   const eventDate = event.duration.startDate.slice(0, 10) || "TBD";
   const eventPrice = event.price || getPrice();
-  const eventType = event.competiton?.name || "Undetermined";
+  const eventType = event.competition?.name || "Undetermined";
 
   function getPrice() {
     const prices = [250, 150, 300, 100, 200, 400];

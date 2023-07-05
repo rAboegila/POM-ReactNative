@@ -49,7 +49,7 @@ export default function TicketCard({ ticket, navigation }) {
         {event ?addWhiteSpace(event.name) : "Event"}
       </Text>
       <Center style={styles.group5Row}>
-        <Box style={styles.group5}>
+        <Box style={styles.group}>
           <Box style={styles.infoCard}>
             <Box style={styles.information}>
               <Box style={styles.group}>
@@ -81,7 +81,7 @@ export default function TicketCard({ ticket, navigation }) {
             </Box>
           </Box>
         </Box>
-        <CardButton
+        {/* <CardButton
           onPress={() => {
             console.log("Card Button Pressed");
             navigation.navigate("NotFound");
@@ -89,7 +89,7 @@ export default function TicketCard({ ticket, navigation }) {
           firstWord={"Enter"}
           secondWord={"Event"}
           disabled={false}
-        />
+        /> */}
       </Center>
     </Box>
   );
