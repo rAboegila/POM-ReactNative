@@ -22,11 +22,13 @@ import HomeButton from "../../components/HomeButton/component";
 import { useDispatch, useSelector } from "react-redux";
 import { getMemoizedProfile } from "../../redux/features/profile/profileSlice";
 
+//Helper Functions
+import { getProfileImageUrl, toSentenceCase } from "../../lib/helpers";
+
 // External Style Sheet Import
 import styles from "./styles";
-
+//"https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
 export default function Profile({ navigation }) {
-  //"https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80""
   const [isEditing, setIsEditing] = useState(false);
   const userProfile = useSelector(getMemoizedProfile);
   function toggleEditMode() {
@@ -44,16 +46,15 @@ export default function Profile({ navigation }) {
         <Center>
           <Avatar
             bg="green.500"
-            source={
-              // uri: "",
-              userProfile.profilePic
-            }
+            source={{
+              uri: getProfileImageUrl(userProfile.profilePic),
+            }}
             size={"xl"}
             mb="4"
           ></Avatar>
           <Center flexDirection="row">
             <Text fontSize={"md"} mx="4">
-              {userProfile.firstName} {userProfile.lastName}
+            {toSentenceCase(userProfile.firstName)} {toSentenceCase(userProfile.lastName)}
             </Text>
             <IconButton
               onPress={toggleEditMode}
@@ -72,6 +73,7 @@ export default function Profile({ navigation }) {
         <ProfileInformationForm
           isEditing={isEditing}
           setIsEditing={setIsEditing}
+          profile={userProfile}
           my="3"
         />
       </ScrollView>

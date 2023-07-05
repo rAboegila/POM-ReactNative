@@ -4,19 +4,30 @@ import React, { useState } from "react";
 //APIs Import
 
 // UI Library and Elements Imports
-import { Center, VStack, Button, FormControl, View } from "native-base";
+import { Center, VStack, Button, FormControl, View, Input } from "native-base";
 import DropDownPicker from "react-native-dropdown-picker";
+
+//Redux
+import { useDispatch, useSelector } from "react-redux";
+import { updateProfile } from "../../redux/features/profile/profileSlice";
 
 //Import Library Objects
 import { INTERESTS } from "../../lib/enums";
 import { toSentenceCase } from "../../lib/helpers";
+
 //Components Imports
 import FormInput from "../FormInput/component";
 import CustomDatePicker from "../CustomDatePicker/component";
-// External Style Sheet Import
-// import styles from "./styles";
 
-export default function ProfileInformationForm({ isEditing, setIsEditing }) {
+// External Style Sheet Import
+import styles from "./styles";
+
+export default function ProfileInformationForm({
+  isEditing,
+  setIsEditing,
+  profile,
+}) {
+  const dispatch = useDispatch();
   const profilePlaceholder = {
     firstName: "John",
     lastName: "Doe",
@@ -27,11 +38,11 @@ export default function ProfileInformationForm({ isEditing, setIsEditing }) {
 
   //redux state
   const profileDefault = {
-    firstName: "Rawan",
-    lastName: "Aboegila",
-    email: "rawan@example.com",
-    dob: "2000-4-18",
-    interest: "Skate",
+    firstName: profile.firstName,
+    lastName: profile.lastName,
+    email: profile.email,
+    dob: profile.dob,
+    interest: profile.interests,
   };
 
   //component inner state
@@ -47,6 +58,7 @@ export default function ProfileInformationForm({ isEditing, setIsEditing }) {
   const [formData, setData] = useState({ ...profileDefault });
   const [errors, setErrors] = useState({});
   const [showDate, setShowDate] = useState(false);
+  const [changes, setChanges] = useState([]);
 
   DropDownPicker.setListMode("SCROLLVIEW");
   const validate = () => {
@@ -131,7 +143,8 @@ export default function ProfileInformationForm({ isEditing, setIsEditing }) {
     console.log(formData);
 
     if (validate()) {
-      console.log("Submitted");
+      console.log("Submitted", formData);
+      dispatch(updateProfile(formData));
       setIsEditing(false);
     } else {
       console.log("Validation Failed");
@@ -140,7 +153,7 @@ export default function ProfileInformationForm({ isEditing, setIsEditing }) {
   const Update = () => {
     setIsEditing(true);
   };
-
+  console.log("myprofile:\n", profileDefault);
   return (
     <Center>
       <VStack width="90%" mx="3" maxW="300px">
@@ -211,32 +224,33 @@ export default function ProfileInformationForm({ isEditing, setIsEditing }) {
             Interests
           </FormControl.Label>
           <View>
-            <DropDownPicker
-              disabledStyle={{
-                backgroundColor: "transparent",
-                borderColor: "#a3a3a3",
-                opacity: 0.25,
-              }}
-              textStyle={{
-                fontSize: 12,
-              }}
-              open={interestsOpen}
-              value={formData.interest}
-              items={interests}
-              setOpen={setInterestsOpen}
-              setValue={setInterestsValue}
-              setItems={setInterests}
-              placeholder={
-                profileDefault
-                  ? profileDefault.interest
-                  : profilePlaceholder.interest
-              }
-              onSelectItem={(value) => onChangeHandler("interest", value.value)}
-              dropDownDirection="TOP"
-              zIndex={3000}
-              zIndexInverse={1000}
-              disabled={!isEditing}
-            />
+            {isEditing ? (
+              <DropDownPicker
+                disabledStyle={{
+                  backgroundColor: "transparent",
+                  borderColor: "#a3a3a3",
+                  opacity: 0.25,
+                }}
+                textStyle={{
+                  fontSize: 12,
+                }}
+                open={interestsOpen}
+                value={formData.interest}
+                items={interests}
+                setOpen={setInterestsOpen}
+                setValue={setInterestsValue}
+                setItems={setInterests}
+                onSelectItem={(value) =>
+                  onChangeHandler("interest", value.value)
+                }
+                dropDownDirection="TOP"
+                zIndex={3000}
+                zIndexInverse={1000}
+                disabled={!isEditing}
+              />
+            ) : (
+              <Input value={profileDefault.interest} isDisabled={true}></Input>
+            )}
           </View>
           {errors.interest ? (
             <FormControl.ErrorMessage>

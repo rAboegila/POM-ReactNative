@@ -10,6 +10,7 @@ import { Announcements } from "../../../lib/types";
 import { GOVERNMENTS, INTERESTS } from "../../../lib/enums";
 
 const initialState = {
+  id: "",
   firstName: "",
   lastName: "",
   username: "",
@@ -31,6 +32,7 @@ const initialState = {
 
 function setProfile(state, profile) {
   // console.log("setProfile-----------------\n", profile);
+  state.id = profile._id;
   state.firstName = profile.firstName;
   state.lastName = profile.lastName;
   state.username = profile.username;
@@ -43,6 +45,8 @@ function setProfile(state, profile) {
   state.interests = profile.interests;
   state.announcements = profile.announcements;
   state.isSuspended = profile.isSuspended;
+  state.isDirty = false;
+
   // console.log("setProfile-----------------\n", state);
 }
 
@@ -67,15 +71,25 @@ export const fetchProfile = createAsyncThunk(
     return res;
   }
 );
-
 export const updateProfile = createAsyncThunk(
-  //action type string
   "profile/updateProfile",
-  // callback function
-  (data) => {
-    return apiToken()
-      .put("auth/update", data)
-      .then((res) => res.data);
+  async (args) => {
+    const token = await getSavedToken();
+
+    const res = await api
+      .put("auth/update", args, {
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        return res.data;
+      })
+      .catch((err) => {
+        console.log(err.request.data);
+      });
+    return res;
   }
 );
 
@@ -97,9 +111,8 @@ export const profileSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(fetchProfile.fulfilled, (state, action) => {
-      console.log("profile fullfilled");
+      console.log("profile fullfilled", action.payload);
       state.loading = false;
-      state.isDirty = false;
       setProfile(state, action.payload.data);
       state.error = "";
     });
@@ -109,16 +122,21 @@ export const profileSlice = createSlice({
       state.loading = false;
       state.error = action.error.message;
     });
-    
+
     builder.addCase(updateProfile.pending, (state) => {
       state.loading = true;
+      state.isDirty = true;
+      console.log("update profile pending");
     });
     builder.addCase(updateProfile.fulfilled, (state, action) => {
+      console.log("update profile fullfilled", action.payload);
       state.loading = false;
-      state.isDirty = true;
+      setProfile(state, action.payload.data);
       state.error = "";
     });
     builder.addCase(updateProfile.rejected, (state, action) => {
+      console.log("update profile rejected > ", action.error.message);
+
       state.loading = false;
       state.error = action.error.message;
     });
@@ -140,6 +158,7 @@ export const getRole = (state) => state.profile.role;
 export const getInterests = (state) => state.profile.interests;
 export const getAnnouncements = (state) => state.profile.announcements;
 export const isSuspended = (state) => state.profile.isSuspended;
+export const getID = (state) => state.profile.id;
 
 const getUserInfo = (state) => state.profile;
 export const getMemoizedProfile = createSelector(getUserInfo, (profile) => {
