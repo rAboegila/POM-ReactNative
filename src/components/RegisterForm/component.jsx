@@ -25,8 +25,39 @@ import styles from "./styles";
 import { governments, interests } from "../../lib/dropDownValues";
 
 export default function RegisterForm({ navigation }) {
-  const [hasGalleryPermission, requestGalleryPermission] =
-    ImagePicker.useMediaLibraryPermissions();
+  // for user feedback
+  const [loading, setLoading] = useState(false);
+  const toast = useToast();
+
+  //   form data states
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [government, setGovernment] = useState(null);
+  const [interestsValue, setInterestsValue] = useState(null);
+  const [profilePicture, setProfilePicture] = useState(null);
+
+  // errors for form validation
+  const [errors, setErrors] = useState({});
+
+  //   for temp data
+  const [dob, setDob] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+
+//   useEffect(async () => {
+//     if (hasGalleryPermission.granted) {
+//       const result = await requestGalleryPermission;
+//       console.log(result);
+//     }
+//   }, []);
+
+// const [hasGalleryPermission, requestGalleryPermission] =
+  //   ImagePicker.useMediaLibraryPermissions();
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -47,36 +78,6 @@ export default function RegisterForm({ navigation }) {
     }
   };
 
-  // for user feedback
-  const [loading, setLoading] = useState(false);
-  const toast = useToast();
-
-  //   form data states
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [government, setGovernment] = useState("");
-  const [interestsValue, setInterestsValue] = useState(null);
-  const [profilePicture, setProfilePicture] = useState(null);
-
-  // errors for form validation
-  const [errors, setErrors] = useState({});
-
-  //   for temp data
-  const [dob, setDob] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
-
-//   useEffect(async () => {
-//     if (hasGalleryPermission.granted) {
-//       const result = await requestGalleryPermission;
-//       console.log(result);
-//     }
-//   }, []);
   const toggleDatePicker = () => {
     setShowDatePicker(!showDatePicker);
   };
@@ -101,6 +102,9 @@ export default function RegisterForm({ navigation }) {
     } else if (firstName.length < 3 || firstName.length > 10) {
       formIsValid = false;
       errors["firstName"] = "First name must be between 3 and 10 characters";
+    }else if(" " in firstName){
+      formIsValid = false;
+      errors["firstName"] = "No Empty Spaces Allowed"
     }
 
     // Last name validation
@@ -110,6 +114,9 @@ export default function RegisterForm({ navigation }) {
     } else if (lastName.length < 3 || lastName.length > 10) {
       formIsValid = false;
       errors["lastName"] = "Last name must be between 3 and 10 characters";
+    }else if(" " in lastName){
+      formIsValid = false;
+      errors["lastName"] = "No Empty Spaces Allowed"
     }
 
     // Username validation
@@ -119,6 +126,9 @@ export default function RegisterForm({ navigation }) {
     } else if (username.length < 3 || username.length > 10) {
       formIsValid = false;
       errors["username"] = "Username must be between 3 and 10 characters";
+    }else if(" " in username){
+      formIsValid = false;
+      errors["username"] = "No Empty Spaces Allowed"
     }
 
     // Email validation (optional)
@@ -211,16 +221,19 @@ export default function RegisterForm({ navigation }) {
           setErrors({
             request: error.response?.data?.error || "Invalid Register",
           });
+          setLoading(false);
         })
         .finally(() => {
           setLoading(false);
         });
     }
+    setLoading(false);
   };
+
   return (
     <ScrollView w="100%">
       <Center>
-        <Box safeArea p="2" w="90%" maxW="290" py="8">
+        <Box safeArea p="2" w="80%"  py="8">
           {errors.request ? (
             <Text style={styles.requestErorr}>{errors.request}</Text>
           ) : null}
@@ -269,12 +282,12 @@ export default function RegisterForm({ navigation }) {
               placeholder="Username"
               changeHandler={setUsername}
               label="Username"
-              isValid={"userName" in errors}
+              isValid={"username" in errors}
               errorMessage={errors.userName}
               defaultMessage=""
               inputConfig={{
                 isRequired: true,
-                isInvalid: "userName" in errors,
+                isInvalid: "username" in errors,
                 isDisabled: loading,
               }}
             />

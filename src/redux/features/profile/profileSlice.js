@@ -10,7 +10,7 @@ import { Announcements } from "../../../lib/types";
 import { GOVERNMENTS, INTERESTS } from "../../../lib/enums";
 
 const initialState = {
-  id: "",
+  id: null,
   firstName: "",
   lastName: "",
   username: "",
@@ -146,6 +146,7 @@ export const profileSlice = createSlice({
 //Slice Actions
 export const { profileUpdated } = profileSlice.actions;
 //Slice Getters
+export const getUserID = (state) => state.profile.id;
 export const getFirstName = (state) => state.profile.firstName;
 export const getLastName = (state) => state.profile.lastName;
 export const getUserName = (state) => state.profile.username;

@@ -41,7 +41,7 @@ export default function EventDetails({ navigation, route }) {
       />  */}
     <Box safeArea style={styles.container}>
       <Heading
-        size="2xl"
+        size="xl"
         fontWeight="600"
         color="coolGray.800"
         _dark={{

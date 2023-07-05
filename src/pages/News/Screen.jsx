@@ -1,5 +1,5 @@
 //React + React Native Imports
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // UI Library and Elements Imports
 import {
@@ -13,6 +13,7 @@ import {
   Modal,
   Image,
   ZStack,
+  Spinner,
 } from "native-base";
 
 //Components Imports
@@ -24,35 +25,33 @@ import FilterItem from "../../components/FilterItem/component";
 import styles from "./styles";
 import NewsCard from "../../components/NewsCard/component";
 import NewsModal from "../../components/NewsModal/component";
+import api from "../../lib/api";
+import { useSelector } from "react-redux";
+import { getToken } from "../../redux/features/auth/authSlice";
+import { getAnnouncements } from "../../redux/features/profile/profileSlice";
 export default function News({ navigation }) {
   const [showModal, setShowModal] = useState(false);
   const Filters = ["All", "Public", "Mine"];
-  const announcements = [
-    {
-      title: "Speed Run",
-      body: "Pending",
-      image:
-        "https://docs.expo.dev/static/images/react-native-community-cli-debugger-ui.png",
-    },
-    {
-      title: "Speed Run2",
-      body: "Pending",
-      image:
-        "https://docs.expo.dev/static/images/react-native-community-cli-debugger-ui.png",
-    },
-    {
-      title: "Speed Run3",
-      body: "Pending",
-      image:
-        "https://docs.expo.dev/static/images/react-native-community-cli-debugger-ui.png",
-    },
-    {
-      title: "Speed Run",
-      body: "Pending",
-      image:
-        "https://docs.expo.dev/static/images/react-native-community-cli-debugger-ui.png",
-    },
-  ];
+  const [announcements, setAnnouncements] = useState([]);
+  const userAnnouncements= useSelector(getAnnouncements)
+  const [generalAnnouncements, setGeneralAnnouncements] = useState([]);
+
+  const token = useSelector(getToken);
+  async function getGeneralAnnouncements() {
+    await api
+      .get("/administration/announcements/general", {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((res) => {
+        console.log(res.data.data);
+        setGeneralAnnouncements(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err.response.error);
+      });
+  }
 
   const [modalAnnouncement, setModalAnnouncement] = useState({
     title: "",
@@ -60,11 +59,28 @@ export default function News({ navigation }) {
     image: "",
   });
 
-
-  function viewMore(announcement){
+  function viewMore(announcement) {
     setModalAnnouncement(announcement);
-    setShowModal(true)
+    setShowModal(true);
   }
+
+  function renderAnnouncements(filter) {
+    switch (filter) {
+      case "Public":
+        setAnnouncements(generalAnnouncements);
+        break;
+      case "Mine":
+        setAnnouncements(userAnnouncements);
+        break;
+      default:
+        setAnnouncements([...generalAnnouncements, ...userAnnouncements]);
+        break;
+    }
+  }
+  useEffect(() => {
+    getGeneralAnnouncements();
+    renderAnnouncements("All");
+  }, []);
   return (
     <>
       <Box safeArea mb="3">
@@ -78,28 +94,33 @@ export default function News({ navigation }) {
             <FilterItem
               style={styles.filterItem}
               label={label}
-              onPress={() => console.log(label, "Button")}
+              onPress={() => renderAnnouncements(label)}
               disabled={false}
               key={label + "_" + index}
             ></FilterItem>
           ))}
         </Box>
       </Center>
-      <ScrollView mt="3">
-        <Center>
-          {announcements.map((announcement, index) => (
-            <NewsCard
-              style={styles.eventCard}
-              title={announcement.title}
-              body={announcement.body}
-              image={announcement.image}
-              navigation={navigation}
-              viewMore={()=>viewMore(announcement)}
-              key={announcement.title + "-ticket_" + index}
-            ></NewsCard>
-          ))}
-        </Center>
-      </ScrollView>
+      {!announcements ? (
+        <Spinner size={"lg"} color={"emerald.500"} />
+      ) : (
+        <ScrollView mt="3">
+          <Center>
+            {announcements.map((announcement, index) => (
+              <NewsCard
+                style={styles.eventCard}
+                title={announcement.title}
+                body={announcement.body}
+                image={announcement.image}
+                navigation={navigation}
+                viewMore={() => viewMore(announcement)}
+                key={announcement.title + "-ticket_" + index}
+              ></NewsCard>
+            ))}
+          </Center>
+        </ScrollView>
+      )}
+
       <HomeButton navigation={navigation} />
       <Center>
         <Modal
@@ -112,12 +133,27 @@ export default function News({ navigation }) {
             bg: "warmGray.50",
           }}
         >
-          <Modal.Content maxWidth="350" maxH="212">
+          <Modal.Content width={"90%"}>
             <Modal.CloseButton />
             <Modal.Header>{modalAnnouncement.title}</Modal.Header>
-            <Modal.Body>
+            <Modal.Body size={"lg"} overflow="scroll">
               <Text style={styles.body}>{modalAnnouncement.body}</Text>
-              <Image src={modalAnnouncement.image} alt="image alt" />
+              {modalAnnouncement.image ? (
+                <Image
+                  width={"60%"}
+                  height={"80%"}
+                  resizeMode="contain"
+                  source={{
+                    uri:
+                      "http://192.168.1.8:5000/uploads/announcements/images/" +
+                      modalAnnouncement.image,
+                  }}
+                  alt={modalAnnouncement.title + " Image"}
+                  _alt={{
+                    color: "grey",
+                  }}
+                />
+              ) : null}
             </Modal.Body>
           </Modal.Content>
         </Modal>

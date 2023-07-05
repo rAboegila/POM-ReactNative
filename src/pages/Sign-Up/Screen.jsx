@@ -1,11 +1,13 @@
-import { View, Text } from "react-native";
 import React from "react";
 import RegisterForm from "../../components/RegisterForm/component";
+import GoBackButton from "../../components/GoBackButton/component";
+import { Box } from "native-base";
 
 export default function SignUp({ navigation }) {
   return (
-    <View>
+    <Box safeArea>
+      <GoBackButton navigation={navigation}/>
       <RegisterForm navigation={navigation} />
-    </View>
+    </Box>
   );
 }

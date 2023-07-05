@@ -16,6 +16,9 @@ import ResetPassword from "../pages/Reset-Password/Screen";
 import { useSelector } from "react-redux";
 import { getLoggedIn, isAppLoading } from "../redux/features/auth/authSlice";
 import EventDetails from "../pages/Event-Details/Screen";
+import Payment from "../pages/Payment/Screen";
+import EventAdminCRUD from "../pages/EventAdminCRUD/component";
+import BuyTicket from "../pages/BuyTicket/Screen";
 
 const Router = () => {
   const isLoggedIn = useSelector(getLoggedIn);
@@ -51,6 +54,16 @@ const Router = () => {
         name="Events"
         component={Events}
       /> */}
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Payment"
+            component={Payment}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Buy Ticket"
+            component={BuyTicket}
+          />
           <Stack.Screen
             options={{ headerShown: false }}
             name="Event Details"

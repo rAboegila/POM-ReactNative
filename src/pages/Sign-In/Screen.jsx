@@ -59,17 +59,23 @@ export default function SignIn({ navigation }) {
           dispatch(setToken(res.data.token));
           toast.show({ title: "Logged in successfully", placement: "top" });
         })
-        .catch((err) => {
-          if (err.response) console.log("sign In error", err.response.data);
-          else console.log("sign In error", err);
-        });
-      setLoading(false);
+        .catch((error) => {
+          console.log(error);
+          setErrors({
+            request: error.response?.data?.error || "Invalid Credentials",
+          });
+          setLoading(false);
+        }).finally(()=>{
+          setLoading(false);
+        })
     }
+    setLoading(false);
   };
 
   return (
     <Center w="100%">
       <Box safeArea p="2" py="8" w="90%" maxW="290">
+        
         <Heading
           size="lg"
           fontWeight="600"
@@ -80,9 +86,11 @@ export default function SignIn({ navigation }) {
         >
           Sign In
         </Heading>
-
         <VStack space={3} mt="5">
-          <FormControl>
+        {errors.request ? (
+            <Text style={styles.requestErorr}>{errors.request}</Text>
+          ) : null}
+          <FormControl isInvalid={"email" in errors}>
             <FormControl.Label>Email</FormControl.Label>
             <Input
               value={email}
@@ -92,10 +100,12 @@ export default function SignIn({ navigation }) {
               }}
             />
             {errors.email ? (
-              <Text style={{ color: "red" }}>{errors.email}</Text>
+              <FormControl.ErrorMessage>
+                {errors.email}
+              </FormControl.ErrorMessage>
             ) : null}
           </FormControl>
-          <FormControl>
+          <FormControl isInvalid={"password" in errors}>
             <FormControl.Label>Password</FormControl.Label>
             <Input
               value={password}
@@ -120,7 +130,9 @@ export default function SignIn({ navigation }) {
               }}
             />
             {errors.password ? (
-              <Text style={{ color: "red" }}>{errors.password}</Text>
+              <FormControl.ErrorMessage>
+                {errors.password}
+              </FormControl.ErrorMessage>
             ) : null}
           </FormControl>
           <Button
@@ -128,12 +140,9 @@ export default function SignIn({ navigation }) {
             colorScheme="#14ae5c"
             style={styles.button}
             onPress={SignIn}
+            isLoading={loading}
           >
-            {loading ? (
-              <Feather name="loader" color="black" size={24} />
-            ) : (
-              <Text>Sign In</Text>
-            )}
+            Sign In
           </Button>
           <HStack justifyContent="space-between">
             <Link

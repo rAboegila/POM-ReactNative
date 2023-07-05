@@ -1,13 +1,12 @@
-import { View, Text } from "react-native";
+import { Text } from "react-native";
 import React, { useState } from "react";
-import { Center, Input, FormControl, Button, Box ,useToast} from "native-base";
+import { Center, Input, FormControl, Button, Box, useToast } from "native-base";
 import { Feather } from "@expo/vector-icons";
-import axios from "axios";
 import { styles } from "./styles";
 import api from "../../lib/api";
+import GoBackButton from "../../components/GoBackButton/component";
 
-export default function ResetPassword({ navigation,route }) {
-
+export default function ResetPassword({ navigation, route }) {
   const reqToken = route.params.reqToken;
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -44,6 +43,12 @@ export default function ResetPassword({ navigation,route }) {
     return formIsValid;
   };
 
+
+  // go back after 10 minutes 
+  setTimeout(()=>{
+    navigation.goBack()
+  },600000)
+
   const handleSubmit = async () => {
     setLoading(true);
     if (handleValidation()) {
@@ -53,49 +58,59 @@ export default function ResetPassword({ navigation,route }) {
           confirmPassword,
         })
         .then(() => {
-          toast.show({title:"Password Updated Successfully",description:"Please Sign In Again",duration:3000})
+          toast.show({
+            title: "Password Updated Successfully",
+            description: "Please Sign In Again",
+            duration: 3000,
+          });
           navigation.navigate("SignIn");
         })
         .catch(() => {
           setErrors({ request: "Reset Denied" });
-          toast.show({title: "Could't Reset Password",duration:3000});
+          toast.show({ title: "Could't Reset Password", duration: 3000 });
         });
     }
     setLoading(false);
   };
 
   return (
-    <Center>
-      <Box safeArea p="2" w="90%" maxW="290" py="8">
-      <Text style={styles.warninngText}>
-        You Have 10 minutes To Reset Password
-      </Text>
-        <FormControl>
-          <FormControl.Label>Password</FormControl.Label>
-          <Input type="password" onChangeText={(value) => setPassword(value)} />
-          {errors.password ? (
-            <Text style={{ color: "red" }}>{errors.password}</Text>
-          ) : null}
-        </FormControl>
-        <FormControl>
-          <FormControl.Label>Confirm Password</FormControl.Label>
-          <Input
-            type="password"
-            onChangeText={(value) => setConfirmPassword(value)}
-          />
-          {errors.confirmPassword ? (
-            <Text style={{ color: "red" }}>{errors.confirmPassword}</Text>
-          ) : null}
-        </FormControl>
+    <Box safeArea>
+      <GoBackButton navigation={navigation} />
+      <Center>
+        <Box safeArea p="2" w="90%" maxW="290" py="8">
+          <Text style={styles.warninngText}>
+            You Have 10 minutes To Reset Password
+          </Text>
+          <FormControl>
+            <FormControl.Label>Password</FormControl.Label>
+            <Input
+              type="password"
+              onChangeText={(value) => setPassword(value)}
+            />
+            {errors.password ? (
+              <Text style={{ color: "red" }}>{errors.password}</Text>
+            ) : null}
+          </FormControl>
+          <FormControl>
+            <FormControl.Label>Confirm Password</FormControl.Label>
+            <Input
+              type="password"
+              onChangeText={(value) => setConfirmPassword(value)}
+            />
+            {errors.confirmPassword ? (
+              <Text style={{ color: "red" }}>{errors.confirmPassword}</Text>
+            ) : null}
+          </FormControl>
 
-        <Button mt="2" style={styles.button} onPress={handleSubmit}>
-          {loading ? (
-            <Feather name="loader" color="black" size={24} />
-          ) : (
-            <Text>Reset Password</Text>
-          )}
-        </Button>
-      </Box>
-    </Center>
+          <Button mt="2" style={styles.button} onPress={handleSubmit}>
+            {loading ? (
+              <Feather name="loader" color="black" size={24} />
+            ) : (
+              <Text>Reset Password</Text>
+            )}
+          </Button>
+        </Box>
+      </Center>
+    </Box>
   );
 }
