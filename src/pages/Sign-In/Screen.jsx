@@ -86,6 +86,7 @@ export default function SignIn({ navigation }) {
             <FormControl.Label>Email</FormControl.Label>
             <Input
               value={email}
+              autoCorrect={false}
               onChangeText={(value) => {
                 setEmail(value);
               }}
@@ -99,6 +100,7 @@ export default function SignIn({ navigation }) {
             <Input
               value={password}
               type={show ? "text" : "password"}
+              autoCorrect={false}
               InputRightElement={
                 <Pressable onPress={() => setShow(!show)}>
                   <Icon
