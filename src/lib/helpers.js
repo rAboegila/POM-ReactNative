@@ -8,7 +8,6 @@ export function createEnum(values) {
   return Object.freeze(enumObject);
 }
 export function toSentenceCase(str) {
-  console.log(str);
   return str
     .toLowerCase()
     .split(" ")

@@ -19,7 +19,7 @@ import EventDetails from "../pages/Event-Details/Screen";
 
 const Router = () => {
   const isLoggedIn = useSelector(getLoggedIn);
-  // const isLoading = useSelector(isAppLoading);
+  const isLoading = useSelector(isAppLoading);
 
   const Stack = createNativeStackNavigator();
   return (
@@ -64,7 +64,7 @@ const Router = () => {
         </>
       ) : (
         <>
-          {/* <>
+          <>
             {isLoading && (
               <Stack.Screen
                 options={{ headerShown: false }}
@@ -72,7 +72,7 @@ const Router = () => {
                 component={Landing}
               />
             )}
-          </> */}
+          </>
           <Stack.Screen
             options={{ headerShown: false }}
             name="SignIn"
