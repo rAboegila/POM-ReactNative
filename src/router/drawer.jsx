@@ -47,6 +47,9 @@ import {
   getUserName,
 } from "../redux/features/profile/profileSlice";
 
+//Helper Functions
+import { toSentenceCase } from "../lib/helpers";
+
 //Variables
 
 const Drawer = createDrawerNavigator();
@@ -92,8 +95,8 @@ function CustomDrawerContent(props) {
         <HStack space={2} mx="5">
           <DrawerIcon navigation={props.navigation} iconSize={"md"} />
           <Box px="4">
-            <Text bold color="gray.700">
-              Hello {name} !
+            <Text fontSize="16" bold color="gray.700">
+              {toSentenceCase("Hello " + name)} !
             </Text>
             <Text fontSize="14" mt="1" color="gray.500" fontWeight="500">
               @{username}
