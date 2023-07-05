@@ -38,7 +38,7 @@ export default function RegisterForm({ navigation }) {
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [government, setGovernment] = useState("");
+  const [government, setGovernment] = useState(null);
   const [interestsValue, setInterestsValue] = useState(null);
   const [profilePicture, setProfilePicture] = useState(null);
 
@@ -281,12 +281,12 @@ export default function RegisterForm({ navigation }) {
               placeholder="Username"
               changeHandler={setUsername}
               label="Username"
-              isValid={"userName" in errors}
+              isValid={"username" in errors}
               errorMessage={errors.userName}
               defaultMessage=""
               inputConfig={{
                 isRequired: true,
-                isInvalid: "userName" in errors,
+                isInvalid: "username" in errors,
                 isDisabled: loading,
               }}
             />

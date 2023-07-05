@@ -10,6 +10,7 @@ import { Announcements } from "../../../lib/types";
 import { GOVERNMENTS, INTERESTS } from "../../../lib/enums";
 
 const initialState = {
+  id: null,
   firstName: "",
   lastName: "",
   username: "",
@@ -31,6 +32,7 @@ const initialState = {
 
 function setProfile(state, profile) {
   // console.log("setProfile-----------------\n", profile);
+  state.id = profile._id;
   state.firstName = profile.firstName;
   state.lastName = profile.lastName;
   state.username = profile.username;
@@ -109,7 +111,7 @@ export const profileSlice = createSlice({
       state.loading = false;
       state.error = action.error.message;
     });
-    
+
     builder.addCase(updateProfile.pending, (state) => {
       state.loading = true;
     });
@@ -128,6 +130,7 @@ export const profileSlice = createSlice({
 //Slice Actions
 export const { profileUpdated } = profileSlice.actions;
 //Slice Getters
+export const getUserID = (state) => state.profile.id;
 export const getFirstName = (state) => state.profile.firstName;
 export const getLastName = (state) => state.profile.lastName;
 export const getUserName = (state) => state.profile.username;

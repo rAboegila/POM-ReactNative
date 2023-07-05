@@ -1,55 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { Text, Box, Button, FlatList, HStack, Center } from "native-base";
+import {
+  Text,
+  Box,
+  Button,
+  FlatList,
+  HStack,
+  Center,
+  useDisclose,
+  Spinner,
+} from "native-base";
 import HomeButton from "../../components/HomeButton/component";
 
 import styles from "./styles";
 import EventCard from "../../components/EventCard/component";
 import DrawerIcon from "../../components/DrawerIcon/component";
 import api, { apiToken } from "../../lib/api";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getToken } from "../../redux/features/auth/authSlice";
+import { fetchEvents, getEvents } from "../../redux/features/events/eventSlice";
 export default function Events({ navigation }) {
   const [events, setEvents] = useState([]);
-  // const events = [
-  //   {
-  //     id: 1,
-  //     name: "event",
-  //     price: 100,
-  //     date: "2023-7-10",
-  //     type: "parkour",
-  //     description:
-  //       "loremipsumksladakdmklasdklsamdlkaslkdmklsamdlkmaskldmklamsdlkmsalkdmklasmdlkmaslkdmlksamdk",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "event",
-  //     price: 100,
-  //     date: "2023-7-3",
-  //     type: "parkour",
-  //     description:
-  //       "loremipsumksladakdmklasdklsamdlkaslkdmklsamdlkmaskldmklamsdlkmsalkdmklasmdlkmaslkdmlksamdk",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "event",
-  //     price: 100,
-  //     date: "2023-8-10",
-  //     type: "parkour",
-  //     description:
-  //       "loremipsumksladakdmklasdklsamdlkaslkdmklsamdlkmaskldmklamsdlkmsalkdmklasmdlkmaslkdmlksamdk",
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "event",
-  //     price: 100,
-  //     date: "2025-8-10",
-  //     type: "parkour",
-  //     description:
-  //       "loremipsumksladakdmklasdklsamdlkaslkdmklsamdlkmaskldmklamsdlkmsalkdmklasmdlkmaslkdmlksamdk",
-  //   },
-  // ]; //
-
   const [renderedEvents, setRenderedEvents] = useState(events);
+  const [pageLoading, setPageLoading] = useState(true);
 
   const routeToDetails = (event) => {
     navigation.navigate("Event Details", { event });
@@ -64,6 +36,7 @@ export default function Events({ navigation }) {
   };
 
   const filterEvents = (filter) => {
+    setPageLoading(true);
     let filteredEvents;
     switch (filter) {
       case "Week":
@@ -82,34 +55,30 @@ export default function Events({ navigation }) {
         setRenderedEvents(events);
         break;
     }
+    setPageLoading(false);
   };
 
-  const token = useSelector(getToken);
   const getEvents = async () => {
-    await api
-      .get("Event/events", {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      })
+    const tokenInstance = await apiToken();
+    await tokenInstance
+      .get("Event/events")
       .then((res) => {
-        // console.log(res.data.data);
         setRenderedEvents(res.data.data);
         setEvents(res.data.data);
       })
-      .catch((err) => console.log(err.response.data));
+      .catch((err) => console.log(err.response.data))
+      .finally(() => setPageLoading(false));
   };
-
   useEffect(() => {
     getEvents();
   }, []);
   return (
     <>
-      {/* <Box safeArea mb="3">
+      <Box safeArea mb="3">
         <HStack mx="3" my="2">
           <DrawerIcon navigation={navigation} iconSize={"lg"} />
         </HStack>
-      </Box> */}
+      </Box>
       <Box safeArea style={styles.container}>
         <HStack mb="3" justifyContent="space-between" width="70%">
           <Button colorScheme="green" onPress={() => filterEvents("All")}>
@@ -122,17 +91,24 @@ export default function Events({ navigation }) {
             In Month
           </Button>
         </HStack>
-        <FlatList
-          style={styles.list}
-          data={renderedEvents}
-          renderItem={({ item }) => (
-            <Center>
-              <EventCard event={item} routeToDetails={routeToDetails} />
-            </Center>
-          )}
-          keyExtractor={(item) => item._id}
-        />
-        {/* {events.map((event)=><EventCard event={event} routeToDetails={routeToDetails}/>)} */}
+        {pageLoading ? (
+          <Spinner size={"lg"} color="emerald.500" />
+        ) : (
+          <FlatList
+            style={styles.list}
+            data={renderedEvents}
+            renderItem={({ item }) => (
+              <Center>
+                <EventCard
+                  event={item}
+                  routeToDetails={routeToDetails}
+                  navigation={navigation}
+                />
+              </Center>
+            )}
+            keyExtractor={(item) => item._id}
+          />
+        )}
       </Box>
       <HomeButton navigation={navigation} />
     </>

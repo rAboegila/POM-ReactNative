@@ -18,7 +18,7 @@ import {
 } from "@expo/vector-icons";
 import { styles } from "./styles";
 
-export default function EventCard({ event, routeToDetails,navigation }) {
+export default function EventCrudCard({ event, updateItem, deleteItem }) {
   const eventName = event.name || "Event";
   const eventDate = event.duration.startDate.slice(0, 10) || "TBD";
   const eventPrice = event.price || getPrice();
@@ -65,9 +65,9 @@ export default function EventCard({ event, routeToDetails,navigation }) {
                 />
               }
               style={styles.viewMore}
-              onPress={() => routeToDetails(event)}
+              onPress={() => updateItem(event)}
             >
-              ViewMore
+              Update
             </Button>
             <Button
               rightIcon={
@@ -82,11 +82,9 @@ export default function EventCard({ event, routeToDetails,navigation }) {
                 />
               }
               style={styles.buyTicket}
-              onPress={()=>navigation.navigate("Buy Ticket",{
-                event
-              })}
+              onPress={() => deleteItem(event)}
             >
-              Buy Ticket
+              Delete
             </Button>
           </VStack>
         </HStack>

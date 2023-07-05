@@ -13,6 +13,7 @@ import {
   Modal,
   Image,
   ZStack,
+  Spinner,
 } from "native-base";
 
 //Components Imports
@@ -32,7 +33,7 @@ export default function News({ navigation }) {
   const [showModal, setShowModal] = useState(false);
   const Filters = ["All", "Public", "Mine"];
   const [announcements, setAnnouncements] = useState([]);
-  const [userAnnouncements, setUserAnnouncements] = useState(useSelector(getAnnouncements));
+  const userAnnouncements= useSelector(getAnnouncements)
   const [generalAnnouncements, setGeneralAnnouncements] = useState([]);
 
   const token = useSelector(getToken);
@@ -63,16 +64,16 @@ export default function News({ navigation }) {
     setShowModal(true);
   }
 
-  function renderAnnouncements(filter){
+  function renderAnnouncements(filter) {
     switch (filter) {
       case "Public":
-        setAnnouncements(generalAnnouncements)
+        setAnnouncements(generalAnnouncements);
         break;
       case "Mine":
-        setAnnouncements(userAnnouncements)
+        setAnnouncements(userAnnouncements);
         break;
       default:
-        setAnnouncements([...generalAnnouncements,...userAnnouncements])
+        setAnnouncements([...generalAnnouncements, ...userAnnouncements]);
         break;
     }
   }
@@ -100,21 +101,26 @@ export default function News({ navigation }) {
           ))}
         </Box>
       </Center>
-      <ScrollView mt="3">
-        <Center>
-          {announcements.map((announcement, index) => (
-            <NewsCard
-              style={styles.eventCard}
-              title={announcement.title}
-              body={announcement.body}
-              image={announcement.image}
-              navigation={navigation}
-              viewMore={() => viewMore(announcement)}
-              key={announcement.title + "-ticket_" + index}
-            ></NewsCard>
-          ))}
-        </Center>
-      </ScrollView>
+      {!announcements ? (
+        <Spinner size={"lg"} color={"emerald.500"} />
+      ) : (
+        <ScrollView mt="3">
+          <Center>
+            {announcements.map((announcement, index) => (
+              <NewsCard
+                style={styles.eventCard}
+                title={announcement.title}
+                body={announcement.body}
+                image={announcement.image}
+                navigation={navigation}
+                viewMore={() => viewMore(announcement)}
+                key={announcement.title + "-ticket_" + index}
+              ></NewsCard>
+            ))}
+          </Center>
+        </ScrollView>
+      )}
+
       <HomeButton navigation={navigation} />
       <Center>
         <Modal

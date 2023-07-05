@@ -224,7 +224,7 @@ export default function DrawerRouter() {
         component={News}
       />
       <Drawer.Screen
-        options={{ headerShown: true }}
+        options={{ headerShown: false }}
         name="Events"
         component={Events}
       />
