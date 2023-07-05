@@ -9,3 +9,6 @@ export async function getSavedToken() {
     return token;
   } else return null;
 }
+export async function deleteSavedToken() {
+  await SecureStore.deleteItemAsync("token");
+}

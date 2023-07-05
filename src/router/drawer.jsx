@@ -49,6 +49,7 @@ import {
 
 //Helper Functions
 import { toSentenceCase } from "../lib/helpers";
+import { deleteSavedToken } from "../lib/secureStorage";
 
 //Variables
 
@@ -96,7 +97,7 @@ function CustomDrawerContent(props) {
           <DrawerIcon navigation={props.navigation} iconSize={"md"} />
           <Box px="4">
             <Text fontSize="16" bold color="gray.700">
-              {toSentenceCase("Hello " + name)} !
+              Hello {name} !
             </Text>
             <Text fontSize="14" mt="1" color="gray.500" fontWeight="500">
               @{username}
@@ -173,6 +174,7 @@ function CustomDrawerContent(props) {
                 px="5"
                 py="3"
                 onPress={(event) => {
+                  deleteSavedToken();
                   dispatch(loggedOut());
                 }}
               >

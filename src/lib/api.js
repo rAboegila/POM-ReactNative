@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getSavedToken } from "./secureStorage";
 import { LOCAL_BASE_URL, DEPLOY_BASE_URL } from "../lib/env";
-const baseURL = LOCAL_BASE_URL;
+const baseURL = DEPLOY_BASE_URL;
 export const apiToken = () =>
   axios.create({
     baseURL: baseURL,

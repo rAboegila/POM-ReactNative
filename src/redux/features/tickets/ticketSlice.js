@@ -7,7 +7,7 @@ import api from "../../../lib/api";
 import { getSavedToken } from "../../../lib/secureStorage";
 
 const initialState = {
-  tickets: [],
+  tickets: null,
   isDirty: false,
 };
 

@@ -31,36 +31,6 @@ import styles from "./styles";
 export default function MyTickets({ navigation }) {
   const dispatch = useDispatch();
   const Filters = ["All", "Past", "Future", "Now"];
-  // const myTickets = [
-  //   {
-  //     eventTitle: "Speed Run",
-  //     status: "Pending",
-  //     type: "Early Bird - Guest",
-  //     date: "2023-07-12",
-  //     time: "12 pm",
-  //   },
-  //   {
-  //     eventTitle: "Parkour Free Run",
-  //     status: "Verified",
-  //     type: "Early Bird - Participant",
-  //     date: "2023-07-12",
-  //     time: "12 pm",
-  //   },
-  //   {
-  //     eventTitle: "Skate Free Style",
-  //     status: "Cancelled",
-  //     type: "Regular - Guest",
-  //     date: "2023-07-12",
-  //     time: "12 pm",
-  //   },
-  //   {
-  //     eventTitle: "Keep Moving",
-  //     status: "Verified",
-  //     type: "Regular - Guest",
-  //     date: "2023-07-12",
-  //     time: "12 pm",
-  //   },
-  // ];
   const userID = useSelector(getID);
   useEffect(() => {
     dispatch(fetchTickets(userID));
@@ -87,18 +57,27 @@ export default function MyTickets({ navigation }) {
           ))}
         </Box>
       </Center>
-      <ScrollView mt="3">
-        <Center>
-          {myTickets.map((ticket, index) => (
-            <TicketCard
-              style={styles.eventCard}
-              ticket={ticket}
-              navigation={navigation}
-              key={ticket.eventID + "-ticket_" + index}
-            ></TicketCard>
-          ))}
+      {myTickets === [] ? (
+        <ScrollView mt="3">
+          <Center>
+            {myTickets.map((ticket, index) => (
+              <TicketCard
+                style={styles.eventCard}
+                ticket={ticket}
+                navigation={navigation}
+                key={ticket.eventID + "-ticket_" + index}
+              ></TicketCard>
+            ))}
+          </Center>
+        </ScrollView>
+      ) : (
+        <Center style={{ flex: 1 }}>
+          <Text style={{ fontWeight: "bold" }} size="xxl">
+            No Tickets Available!
+          </Text>
         </Center>
-      </ScrollView>
+      )}
+
       <HomeButton navigation={navigation} />
     </>
   );
