@@ -10,44 +10,6 @@ import { useSelector } from "react-redux";
 import { getToken } from "../../redux/features/auth/authSlice";
 export default function Events({ navigation }) {
   const [events, setEvents] = useState([]);
-  // const events = [
-  //   {
-  //     id: 1,
-  //     name: "event",
-  //     price: 100,
-  //     date: "2023-7-10",
-  //     type: "parkour",
-  //     description:
-  //       "loremipsumksladakdmklasdklsamdlkaslkdmklsamdlkmaskldmklamsdlkmsalkdmklasmdlkmaslkdmlksamdk",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "event",
-  //     price: 100,
-  //     date: "2023-7-3",
-  //     type: "parkour",
-  //     description:
-  //       "loremipsumksladakdmklasdklsamdlkaslkdmklsamdlkmaskldmklamsdlkmsalkdmklasmdlkmaslkdmlksamdk",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "event",
-  //     price: 100,
-  //     date: "2023-8-10",
-  //     type: "parkour",
-  //     description:
-  //       "loremipsumksladakdmklasdklsamdlkaslkdmklsamdlkmaskldmklamsdlkmsalkdmklasmdlkmaslkdmlksamdk",
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "event",
-  //     price: 100,
-  //     date: "2025-8-10",
-  //     type: "parkour",
-  //     description:
-  //       "loremipsumksladakdmklasdklsamdlkaslkdmklsamdlkmaskldmklamsdlkmsalkdmklasmdlkmaslkdmlksamdk",
-  //   },
-  // ]; //
 
   const [renderedEvents, setRenderedEvents] = useState(events);
 
@@ -93,7 +55,7 @@ export default function Events({ navigation }) {
         },
       })
       .then((res) => {
-        console.log(res.data.data);
+        // console.log(res.data.data);
         setEvents(res.data.data);
         setRenderedEvents(res.data.data);
       })
@@ -127,7 +89,7 @@ export default function Events({ navigation }) {
           data={renderedEvents}
           renderItem={({ item }) => (
             <Center>
-              <EventCard  event={item} routeToDetails={routeToDetails} />
+              <EventCard event={item} routeToDetails={routeToDetails} />
             </Center>
           )}
           keyExtractor={(item) => item._id}

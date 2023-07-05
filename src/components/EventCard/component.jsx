@@ -31,7 +31,7 @@ export default function EventCard({ event, routeToDetails }) {
     return prices[randomIndex];
   }
   return (
-    <Box style={styles.card} shadow={2}>
+    <Box style={styles.card} shadow={4}>
       <VStack space="4">
         <Heading px="4" pt="4" style={styles.text} size={"md"}>
           {eventName}
